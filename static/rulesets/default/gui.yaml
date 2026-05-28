@@ -15,7 +15,7 @@ statsBar:
   - text: ui.computeMeter
     side: left
     updateTrigger:
-      variables: ["player.compute"]
+      variables: ["player.compute", "elapsedMonth"]
     conditionalStyles:
     - condition: player.compute >= 4
       styleClasses: ["normal"]
@@ -26,7 +26,7 @@ statsBar:
   - text: ui.citationMeter
     side: right
     updateTrigger:
-      variables: ["player.citations"]
+      variables: ["player.citations", "elapsedMonth"]
   - text: ui.timeMeter
     side: right
     updateTrigger:

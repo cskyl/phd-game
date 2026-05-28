@@ -4,7 +4,9 @@
   "description": "A random event driven text-based game engine, for simulating a PhD student's life.",
   "scripts": {
     "build": "npx webpack",
-    "start": "node app.js"
+    "start": "node app.js",
+    "validate": "node scripts/validate-ruleset.js",
+    "prebuild": "node scripts/validate-ruleset.js"
   },
   "author": "Mianzhi Wang",
   "license": "MIT",

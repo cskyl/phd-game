@@ -58,6 +58,8 @@ status.upgradedEquipment: New GPU Node
 status.upgradedEquipment.description: Your advisor secured fresh H100s. Experiments are more likely to succeed and you regenerate more compute each month.
 status.cloudStorage: Auto-Checkpointing
 status.cloudStorage.description: Checkpoints are synced to a cloud bucket automatically. A crash is far less likely to wipe your results.
+status.interned: On Internship
+status.interned.description: You've done an internship recently. You can take another one next year.
 status.preprinted: arXiv Preprint Out
 status.preprinted.description: You have a preprint staking your claim. Lower chance of being scooped, plus a steady citation trickle.
 status.strongRebuttal: Strong Rebuttal
@@ -74,14 +76,13 @@ status.unhappyAdvisor: Unhappy Advisor
 status.unhappyAdvisor.description: "**-5 hope** every month. Your advisor is not impressed with your recent progress."
 
 # ---------------------------------------------------------------------------
-# Qualifying exam
+# Coursework (first two years)
 # ---------------------------------------------------------------------------
-message.qualifyNotice: "DEPARTMENT NOTICE: All PhD students must pass the **qualifying exam in December**."
-message.prepareQualify: Study for the qualifying exam.
-message.qualifyLevelUp: You felt more confident about passing the qualifying exam.
-message.qualifyLevelMax: You felt **very confident** about passing the qualifying exam.
-message.qualifyPassed: You **PASSED** the qualifying exam.
-message.qualifyFailed: You **FAILED** the qualifying exam.
+message.courseworkNotice: "DEPARTMENT NOTE: your first two years include required **coursework**. Classes and problem sets will eat into your research time now and then — there's no high-stakes qualifying exam, just less time in the lab early on."
+message.coursework1: Midterms week. Problem sets and a course report swallowed your research time this month.
+message.coursework2: You spent the month TA-ing and finishing a course project. Little time for your own research.
+message.coursework3: A heavy course load (and a final exam) kept you out of the lab this month.
+message.courseworkIdea: A lecture in your ML theory course actually sparked a research idea. Coursework wasn't a total loss this month.
 
 # ---------------------------------------------------------------------------
 # Burnout
@@ -202,8 +203,23 @@ message.caughtSlackOff3: Your advisor sent three messages with no reply, then as
 message.slackOffSuccess: You went hiking, ignored OpenReview for a weekend, and felt human again.
 message.lostAllHope: You lost all hope and **dropped out** to take an industry job.
 message.overdue: You **ran out of time** and could not finish your PhD.
-message.workOnThesis: Write and defend your thesis.
-message.graduated: Congratulations! You stapled your papers into a thesis and passed your defense. You **earned your PhD**! Dr. You-Now. Be proud!
+message.workOnThesis: Write up & defend your thesis (graduate).
+message.decideToGraduate: You've cleared the bar. You decide to write up your thesis and schedule your defense.
+message.forcedGraduation: "Your advisor pulls you aside: \"You've got enough papers and you've been here a while. It's time — write it up and get out. I need the desk for a new student.\""
+message.graduated: You stapled your papers into a thesis and **passed your defense**. You're officially **Dr. You-Now**! Now — what next?
+message.chooseCareer: Where will you take your shiny new PhD?
+message.goAcademia: Go on the **academic** job market.
+message.goIndustry: Go to **industry**.
+# --- Academia placements (best to worst) ---
+message.academiaTop: "**ACADEMIA — DREAM OUTCOME.** With your stellar record, you land a **tenure-track faculty** offer at a top department (think Stanfjord / Massivechusetts Institute of Tech / Berzerkeley). Your future students will run this simulator. 🎓"
+message.academiaMid: "**ACADEMIA.** You earn a **faculty offer at a solid research university** (Carnegie Meowlon / UC Sunnyvale). Grants to write, students to advise — the grind continues, but it's yours now."
+message.academiaPostdoc: "**ACADEMIA — POSTDOC.** No faculty offer yet, but you secure a **prestigious postdoc** to strengthen your record and try the market again next year. Onward."
+message.academiaLow: "**ACADEMIA didn't pan out.** The faculty market was brutal this cycle. You take a research-scientist role instead — PhD in hand, you'll be just fine."
+# --- Industry placements (best to worst) ---
+message.industryTop: "**INDUSTRY — DREAM OUTCOME.** A frontier lab (DeepKind / OpenAEye / Entropic) hires you as a **Research Scientist** with a jaw-dropping package and a cluster the size of a small country. 🚀"
+message.industryMid: "**INDUSTRY.** You join Big Tech (狗家 Goggle / 香蕉 Banana / 软软 Mikrohard) as a **Senior Applied Scientist**. Great pay, great GPUs, and your papers actually shipped into products."
+message.industryGood: "**INDUSTRY.** You land a solid **Machine Learning Engineer** role at a well-known company. Comfortable, stable, and nobody will ever reject your paper again."
+message.industryStartup: "**INDUSTRY — STARTUP.** You join a scrappy AI startup (Mythral / Unicorn.ai) as an early **ML engineer**. Equity lottery ticket in hand, you bet on the moonshot. 🦄"
 
 # ---------------------------------------------------------------------------
 # Citations
@@ -251,7 +267,6 @@ message.confNoNewIdea: The talks were great, the dinner better, and a few people
 # ---------------------------------------------------------------------------
 # Advisor nudges
 # ---------------------------------------------------------------------------
-message.qualifyReminder: Your advisor worried you weren't preparing for the qualifying exam and told you to take it seriously.
 message.tooManyIdeas: 'Your advisor emailed: "You have plenty of ideas — now please turn one of them into an actual result."'
 message.notEnoughPapers: Your advisor pinged you about your publication count, clearly anxious to see more accepted papers.
 message.rejectedPaperAdvisor: 'Your advisor messaged you about the rejection: "Don''t let Reviewer 2 get to you. Cool off, address the comments, resubmit."'
@@ -266,13 +281,24 @@ message.skipRebuttal: Don't bother — the scores won't move.
 message.rebuttalSkipped: You decided the decision was already made and skipped the rebuttal.
 
 # ---------------------------------------------------------------------------
-# Industry internship
+# Internships
 # ---------------------------------------------------------------------------
-message.internshipOffer: A top industry lab (think a frontier-model team) offers you a **summer research internship** — huge compute, smart mentors, and a possible publication. Take it?
+message.applyInternship: Apply for summer internships.
+message.noInternOffer: You ground through coding interviews and take-homes for weeks — but no offer landed this cycle. The month is gone. Build up your record and try again.
+message.recruiterReachout: "A recruiter emails you directly (your advisor may have put in a word): your papers caught a top lab's eye, and they're offering a **research internship** — serious compute, and you can publish. Accept?"
 message.acceptInternship: Accept the internship.
-message.internshipAccepted: You spent the summer with near-unlimited GPUs and brilliant collaborators. You came back with **a new idea**, a big pile of compute credits, more reputation, and renewed energy — though your advisor wished you'd stayed to push your thesis.
-message.declineInternship: Stay and focus on your thesis.
+message.declineInternship: Decline — stay and focus on your thesis.
 message.internshipDeclined: You turned it down to stay focused on your own research. Your advisor was pleased with your commitment.
+message.internFrontierLab1: You interned at **DeepKind**. Near-infinite TPUs, brilliant mentors, and you shipped a paper. You came back loaded with compute credits, citations, and a fat letter of recommendation.
+message.internFrontierLab2: A summer at **OpenAEye** on a frontier team. You touched a model bigger than your whole department's cluster — and got to publish. Reputation through the roof.
+message.internBigTechResearch1: You interned at **狗家 (Goggle) Brain**. A real research role — big compute, smart collaborators, and a publishable project.
+message.internBigTechResearch2: A research internship at **脸谱 (Faceplant) AI Research**. Plenty of GPUs and a paper to show for it.
+message.internProduct1: You interned on a **香蕉 (Banana)** product team. Great pay and decent compute — but it was a product role under NDA, so **no publication**. Your advisor wasn't thrilled.
+message.internProduct2: A product internship at **亚麻 (Amazoom)**. Good money, shipped a feature to millions — but nothing you could put on arXiv.
+message.internGpuRich1: You interned at **黄狗 (NWidia)**. They handed you a **mountain of GPUs** and said "go." Compute for days.
+message.internGpuRich2: A summer at **字节 (ByteDunce)**. Absurd amounts of compute and a fast-moving team; you came back GPU-rich.
+message.internStartup1: You joined a scrappy startup, **Mythral**, for the summer. Tiny cluster, huge velocity — you shipped fast and learned a ton.
+message.internStartup2: An internship at **Unicorn.ai**. Move fast, break models. Little compute but a pile of fresh ideas.
 
 # ---------------------------------------------------------------------------
 # Random morale events
@@ -299,7 +325,6 @@ message.ok: Okay.
 message.gotit: Got it.
 message.workingOnIt: Working on it.
 message.excited: Let's go!
-message.finally: Finally.
 message.hope: Fingers crossed.
 message.encouraging: That's encouraging.
 message.shame: That's a shame.

@@ -18,6 +18,8 @@ status:
         amount: 0.3
   - id: cloudStorage
     duration: Infinity
+  - id: interned
+    duration: 10
   - id: preprinted
     duration: Infinity
   - id: strongRebuttal

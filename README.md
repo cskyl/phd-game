@@ -62,7 +62,23 @@ switch; the timeline seed in the URL hash is preserved across the reload.
 ## About the engine
 
 Random events are defined in [YAML files](static/rulesets/default), so the game
-is easily moddable.
+is easily moddable. The engine (`src/`) is generic; all the AI-PhD content lives
+in the rulesets and the two language files.
+
+## Contributing / Maintenance
+
+**Read [`docs/MAINTAINERS.md`](docs/MAINTAINERS.md) first.** It documents the
+architecture, the YAML content DSL, every game system (compute, citations,
+conference calendar, internships, endings), how to add content, and the gotchas.
+
+Validate ruleset changes (key parity, item/status references, expression
+compilation) with:
+
+```
+npm run validate
+```
+
+This also runs automatically before `npm run build` (the `prebuild` hook).
 
 ## Build and Play Locally
 
@@ -73,7 +89,8 @@ npm run build && npm start
 ```
 
 and then navigate to http://localhost:8000 in your browser. Built bundle will be
-outputted to the `dist` directory.
+outputted to the `dist` directory. (Remember to hard-refresh the browser after a
+rebuild — the bundle filename is stable, so the cache can hide your changes.)
 
 > [!NOTE] 
 > The rulesets in this repo can be different from the online version hosted on

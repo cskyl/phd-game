@@ -58,6 +58,8 @@ status.upgradedEquipment: 新显卡节点
 status.upgradedEquipment.description: 导师搞到了一批崭新的 H100。实验更容易成功，每月还能多回复一些算力。
 status.cloudStorage: 自动存档
 status.cloudStorage.description: checkpoint 会自动同步到云存储。崩了也不太容易丢结果。
+status.interned: 实习中
+status.interned.description: 你最近实习过了。明年可以再去实习一次。
 status.preprinted: arXiv 预印本已发
 status.preprinted.description: 你挂了预印本插旗占坑。被抢发的概率降低，还有稳定的引用涓流。
 status.strongRebuttal: 强力 Rebuttal
@@ -74,14 +76,13 @@ status.unhappyAdvisor: 导师不满
 status.unhappyAdvisor.description: "每月 **-5 希望**。导师对你最近的进展不太满意。"
 
 # ---------------------------------------------------------------------------
-# 资格考试
+# 课程（前两年）
 # ---------------------------------------------------------------------------
-message.qualifyNotice: "院系通知：所有博士生必须通过 **十二月的资格考试（qualifying exam）**。"
-message.prepareQualify: 复习资格考试。
-message.qualifyLevelUp: 你对通过资格考试更有信心了。
-message.qualifyLevelMax: 你对通过资格考试 **信心十足**。
-message.qualifyPassed: 你 **通过** 了资格考试。
-message.qualifyFailed: 你 **没通过** 资格考试。
+message.courseworkNotice: "院系提示：前两年有必修 **课程**。上课和作业会时不时占用你的科研时间——没有高压的博资考，只是前期少了些泡实验室的时间。"
+message.coursework1: 期中周。习题集和一份课程报告吃掉了你这个月的科研时间。
+message.coursework2: 这个月你忙着当助教、赶课程项目，几乎没空做自己的研究。
+message.coursework3: 繁重的课业（外加一场期末考）让你这个月没怎么进实验室。
+message.courseworkIdea: ML 理论课上的一节课居然给了你一个研究灵感。这个月的课也不算全白上。
 
 # ---------------------------------------------------------------------------
 # Burnout
@@ -202,8 +203,23 @@ message.caughtSlackOff3: 导师连发三条消息没人回，转头在组里问�
 message.slackOffSuccess: 你去爬了山，一整个周末没碰 OpenReview，重新找回了人的感觉。
 message.lostAllHope: 你失去了所有希望，**退学** 去业界工作了。
 message.overdue: 你 **耗尽了时间**，没能完成博士学位。
-message.workOnThesis: 写论文并进行答辩。
-message.graduated: 恭喜！你把几篇论文装订成了毕业论文并通过了答辩。你 **拿到了博士学位**！从今天起请叫你「博士」。为自己骄傲吧！
+message.workOnThesis: 写毕业论文并答辩（毕业）。
+message.decideToGraduate: 你已经达标了。你决定开始写毕业论文、安排答辩。
+message.forcedGraduation: "导师把你叫到一边：「论文够了，你也待得够久了。是时候了——写完赶紧毕业吧，我这工位还得留给新学生呢。」"
+message.graduated: 你把几篇论文装订成了毕业论文，并 **通过了答辩**。你正式成为 **博士** 了！那么——接下来呢？
+message.chooseCareer: 拿着这崭新的博士学位，你要去哪儿？
+message.goAcademia: 去 **学术界** 找教职。
+message.goIndustry: 去 **业界**。
+# --- 学术界去向（从好到差）---
+message.academiaTop: "**学术界——梦想结局。** 凭借亮眼的履历，你拿到了顶级院系的 **tenure-track 教职**（斯坦佛 / 麻省理工 / 伯克利之流）。以后轮到你的学生来玩这个模拟器了。🎓"
+message.academiaMid: "**学术界。** 你拿到了一所不错的研究型大学的 **教职**（卡内基喵隆 / 阳光谷大学）。要写本子、要带学生——苦日子还在继续，但这回是你自己的实验室了。"
+message.academiaPostdoc: "**学术界——博士后。** 暂时没拿到教职，但你找到了一个 **不错的博士后** 职位，攒攒履历明年再战。继续加油。"
+message.academiaLow: "**学术界没走通。** 今年的教职市场太残酷了。你转而去做了研究科学家——博士都拿到了，肯定饿不着。"
+# --- 业界去向（从好到差）---
+message.industryTop: "**业界——梦想结局。** 一家前沿大模型实验室（DeepKind / OpenAEye / Entropic）以 **研究科学家** 的身份录用了你，薪资包亮瞎眼，集群大得像个小国家。🚀"
+message.industryMid: "**业界。** 你加入大厂（狗家 Goggle / 香蕉 Banana / 软软 Mikrohard）当 **高级应用科学家**。钱多、卡多，你的论文真的落地成了产品。"
+message.industryGood: "**业界。** 你在一家知名公司拿到了不错的 **机器学习工程师** 岗位。舒服、稳定，再也不会有人拒你的稿了。"
+message.industryStartup: "**业界——创业公司。** 你作为早期 **ML 工程师** 加入了一家干劲十足的 AI 创业公司（Mythral / Unicorn.ai）。手握期权彩票，押注一把星辰大海。🦄"
 
 # ---------------------------------------------------------------------------
 # 引用
@@ -251,7 +267,6 @@ message.confNoNewIdea: 报告很精彩，晚宴更精彩，还有几个人告诉
 # ---------------------------------------------------------------------------
 # 导师提醒
 # ---------------------------------------------------------------------------
-message.qualifyReminder: 导师担心你没在准备资格考试，叮嘱你要认真对待。
 message.tooManyIdeas: 导师发邮件：「你点子够多了——现在请把其中一个做成真正的结果。」
 message.notEnoughPapers: 导师催你的发表数量，显然急着想看到更多录用的论文。
 message.rejectedPaperAdvisor: 导师就这次拒稿给你发消息：「别被审稿人二号影响。冷静一下、回应意见、改投。」
@@ -266,13 +281,24 @@ message.skipRebuttal: 算了——分数不会动的。
 message.rebuttalSkipped: 你觉得结局已定，放弃了写 rebuttal。
 
 # ---------------------------------------------------------------------------
-# 业界实习
+# 实习
 # ---------------------------------------------------------------------------
-message.internshipOffer: 一家顶级业界实验室（某前沿大模型团队）给你发来 **暑期研究实习** 邀请——海量算力、聪明的 mentor，还有可能发一篇论文。接吗？
+message.applyInternship: 投暑期实习。
+message.noInternOffer: 你刷了好几周的算法面和 take-home——这一轮还是没拿到 offer。这个月白费了。攒攒履历再战吧。
+message.recruiterReachout: "一位 recruiter 直接给你发了邮件（也许是你导师打了招呼）：你的论文被一家顶级实验室看上了，他们给你一个 **研究实习** offer——算力管够，还能发论文。接吗？"
 message.acceptInternship: 接受实习。
-message.internshipAccepted: 你用着几乎无限的 GPU、和一群聪明的合作者度过了一个夏天。回来时你带回了 **一个新想法**、一大笔算力额度、更高的声望和满满的干劲——尽管导师有点希望你留下来推进毕业论文。
-message.declineInternship: 留下来专注毕业论文。
+message.declineInternship: 拒绝——留下来专注毕业论文。
 message.internshipDeclined: 你婉拒了邀请，留下来专注自己的研究。导师对你的投入感到很欣慰。
+message.internFrontierLab1: 你在 **DeepKind** 实习。几乎无限的 TPU、顶尖的 mentor，还发了一篇论文。回来时你带着大把算力额度、引用和一封厚厚的推荐信。
+message.internFrontierLab2: 在 **OpenAEye** 的前沿团队过了一个夏天。你上手了一个比你整个系的集群还大的模型——还能发论文。声望直接拉满。
+message.internBigTechResearch1: 你在 **狗家（Goggle）Brain** 实习。真正的研究岗：算力充足、合作者聪明，项目还能发表。
+message.internBigTechResearch2: 在 **脸谱（Faceplant）AI 研究院** 做研究实习。卡管够，还收获了一篇论文。
+message.internProduct1: 你在 **香蕉（Banana）** 的产品团队实习。薪水高、算力也还行——但这是个签了 NDA 的产品岗，**不能发论文**。导师不太高兴。
+message.internProduct2: 在 **亚麻（Amazoom）** 做产品实习。钱不少，上线了一个面向千万用户的功能——但没有任何能挂 arXiv 的东西。
+message.internGpuRich1: 你在 **黄狗（NWidia）** 实习。他们扔给你 **一座 GPU 山**，说「随便跑」。算力管到饱。
+message.internGpuRich2: 在 **字节（ByteDunce）** 过了一个夏天。离谱的算力量、节奏飞快的团队；回来时你算力满满。
+message.internStartup1: 你去一家干劲十足的创业公司 **Mythral** 实习了一个夏天。集群很小，但迭代飞快——你上手很快，学到一堆东西。
+message.internStartup2: 在 **Unicorn.ai** 实习。快速迭代、快速「炼崩」。算力不多，但收获了一堆新点子。
 
 # ---------------------------------------------------------------------------
 # 随机士气事件
@@ -299,7 +325,6 @@ message.ok: 好的。
 message.gotit: 知道了。
 message.workingOnIt: 在弄了在弄了。
 message.excited: 冲！
-message.finally: 终于。
 message.hope: 但愿如此。
 message.encouraging: 挺受鼓舞的。
 message.shame: 真可惜。

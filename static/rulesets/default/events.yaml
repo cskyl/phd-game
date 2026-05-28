@@ -6,21 +6,28 @@
   - id: UpdateVariableLimits
     updates:
       player.hope: [0, 100]
-      player.compute: [0, 40]
+      player.compute: [0, 80]
   - id: UpdateVariables
     updates:
       elapsedMonth: 0
       month: 1
       year: 1
       player.hope: 50
-      # GPU / compute budget (in arbitrary units)
-      player.compute: 3
+      # GPU / compute budget (in arbitrary units); accumulates if unspent
+      player.compute: 5
       # total citations accumulated by your published & preprinted work
       player.citations: 0
       # reputation / impact stock; drives citation growth and acceptance odds
       player.pubWeight: 0
+      # internship tracking (drives the final placement)
+      player.internCount: 0
+      player.researchIntern: 0
+      player.bigTechIntern: 0
+      # set to 1 when you decide (or are pushed) to graduate
+      player.graduating: 0
+      # scratch variable used to compute the final placement
+      player.finalScore: 0
       player.readPapers: 0
-      player.qualifyLevel: 0
       player.monthSkipped: 0
       player.exhaustionLevel: 0
       advisor.fundingLevel: 0
@@ -64,7 +71,7 @@
         message: message.acceptedOffer
         confirm: message.excited
       - id: DisplayMessage
-        message: message.qualifyNotice
+        message: message.courseworkNotice
         confirm: message.ok
     - message: message.declineOffer
       actions:
@@ -81,7 +88,7 @@
     updates:
       player.hope: player.hope + getAttributeValue('player.hopeBoost')
       player.monthSkipped: 0
-      player.compute: clip(player.compute + 2 + advisor.fundingLevel + hasStatus('upgradedEquipment') * 2, 0, 40)
+      player.compute: clip(player.compute + 3 + advisor.fundingLevel + hasStatus('upgradedEquipment') * 2, 0, 80)
 - id: LostAllHope
   trigger: MonthBegin
   conditions:
@@ -241,7 +248,7 @@
     on: false
   - id: UpdateVariable
     variable: player.compute
-    value: clip(player.compute + 4, 0, 40)
+    value: clip(player.compute + 4, 0, 80)
 - id: CloudStorage
   trigger: YearBegin
   once: true
@@ -344,28 +351,6 @@
   - id: SetStatus
     statusId: lateYearAnxiety
     on: true
-# Qualifying exam
-- id: Qualify
-  trigger: MonthBegin
-  once: true
-  conditions:
-  - id: Expression
-    expression: month === 12
-  actions:
-  - id: CoinFlip
-    probability: player.qualifyLevel * 0.2
-    success:
-    - id: DisplayMessage
-      message: message.qualifyPassed
-      confirm: message.great
-    - id: UpdateVariable
-      variable: player.hope
-      value: player.hope + 10
-    fail:
-    - id: EndGame
-      winning: false
-      message: message.qualifyFailed
-      confirm: message.restart
 # ===========================================================================
 # Compute budget / funding
 # ===========================================================================
@@ -388,7 +373,7 @@
         updates:
           advisor.fundingLevel: advisor.fundingLevel + global.fundingChange
           player.hope: player.hope + 5
-          player.compute: clip(player.compute + 5, 0, 40)
+          player.compute: clip(player.compute + 5, 0, 80)
     - condition: global.fundingChange < 0
       actions:
       - id: DisplayMessage
@@ -458,6 +443,35 @@
       - id: SetStatus
         statusId: unhappyAdvisor
         on: false
+# First-two-years coursework: occasionally eats a month of research time.
+- id: Coursework
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: year <= 2 && player.monthSkipped === 0
+  probability: 0.25
+  actions:
+  - id: UpdateVariable
+    variable: player.monthSkipped
+    value: 1
+  - id: Random
+    groups:
+    - weight: 2
+      actions:
+      - id: DisplayRandomMessage
+        messages:
+        - message.coursework1
+        - message.coursework2
+        - message.coursework3
+        confirm: message.ok
+    - weight: 1
+      actions:
+      - id: DisplayMessage
+        message: message.courseworkIdea
+        confirm: message.soundsInteresting
+      - id: GiveItem
+        itemId: idea
+        amount: 1
 # ===========================================================================
 # Main monthly action menu
 # Pipeline: read -> idea -> (compute) experiment -> prelim
@@ -477,30 +491,12 @@
     - message: message.workOnThesis
       requirement: itemCount('paper') >= rule.papersRequired
       actions:
-        - id: EndGame
-          message: message.graduated
-          confirm: message.restartNewTimeline
-          winning: true
-          fx: confetti
-    - message: message.prepareQualify
-      requirement: year === 1 && month < 12 && itemCount('paper') < rule.papersRequired
-      actions:
-      - id: UpdateVariables
-        updates:
-          player.qualifyLevel: player.qualifyLevel + 1
-          player.exhaustionLevel: player.exhaustionLevel + 1
-      - id: Switch
-        branches:
-        - condition: player.qualifyLevel <= 4
-          actions:
-          - id: DisplayMessage
-            message: message.qualifyLevelUp
-            confirm: message.great
-        - condition: 1
-          actions:
-          - id: DisplayMessage
-            message: message.qualifyLevelMax
-            confirm: message.great
+        - id: DisplayMessage
+          message: message.decideToGraduate
+          confirm: message.excited
+        - id: UpdateVariable
+          variable: player.graduating
+          value: 1
     - message: message.readPapers
       requirement: itemCount('paper') < rule.papersRequired
       actions:
@@ -759,6 +755,118 @@
       - id: UpdateVariable
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
+    - message: message.applyInternship
+      requirement: year >= 2 && month <= 4 && !hasStatus('interned') && itemCount('paper') < rule.papersRequired
+      actions:
+      - id: CoinFlip
+        probability: clip(0.40 + player.pubWeight * 0.03 + player.citations / 300, 0.2, 0.95)
+        success:
+        - id: SetStatus
+          statusId: interned
+          on: true
+        - id: Random
+          groups:
+          # Frontier research lab: huge compute, publishable, big reputation.
+          - weight: 1
+            actions:
+            - id: DisplayRandomMessage
+              messages:
+              - message.internFrontierLab1
+              - message.internFrontierLab2
+              confirm: message.party
+            - id: GiveItem
+              itemId: idea
+              amount: 1
+            - id: UpdateVariables
+              updates:
+                player.compute: clip(player.compute + 12, 0, 80)
+                player.hope: player.hope + 10
+                player.pubWeight: player.pubWeight + 2
+                player.citations: player.citations + randi(10) + 5
+                player.internCount: player.internCount + 1
+                player.researchIntern: 1
+                player.bigTechIntern: 1
+                advisor.happiness: advisor.happiness + 2
+          # Big-tech research lab: lots of compute, publishable.
+          - weight: 1.5
+            actions:
+            - id: DisplayRandomMessage
+              messages:
+              - message.internBigTechResearch1
+              - message.internBigTechResearch2
+              confirm: message.great
+            - id: GiveItem
+              itemId: idea
+              amount: 1
+            - id: UpdateVariables
+              updates:
+                player.compute: clip(player.compute + 10, 0, 80)
+                player.hope: player.hope + 8
+                player.pubWeight: player.pubWeight + 1
+                player.citations: player.citations + randi(6) + 2
+                player.internCount: player.internCount + 1
+                player.researchIntern: 1
+                player.bigTechIntern: 1
+                advisor.happiness: advisor.happiness + 1
+          # Product team: good money & compute, but you CANNOT publish.
+          - weight: 2
+            actions:
+            - id: DisplayRandomMessage
+              messages:
+              - message.internProduct1
+              - message.internProduct2
+              confirm: message.cool
+            - id: UpdateVariables
+              updates:
+                player.compute: clip(player.compute + 6, 0, 80)
+                player.hope: player.hope + 11
+                player.internCount: player.internCount + 1
+                player.bigTechIntern: 1
+                advisor.happiness: advisor.happiness - 1
+          # GPU-rich company: a mountain of GPUs, occasional publishing.
+          - weight: 1.2
+            actions:
+            - id: DisplayRandomMessage
+              messages:
+              - message.internGpuRich1
+              - message.internGpuRich2
+              confirm: message.party
+            - id: GiveItem
+              itemId: idea
+              amount: 1
+            - id: UpdateVariables
+              updates:
+                player.compute: clip(player.compute + 16, 0, 80)
+                player.hope: player.hope + 6
+                player.pubWeight: player.pubWeight + 1
+                player.internCount: player.internCount + 1
+                player.bigTechIntern: 1
+          # Startup: scrappy, little compute, fast-moving, publishable.
+          - weight: 1.3
+            actions:
+            - id: DisplayRandomMessage
+              messages:
+              - message.internStartup1
+              - message.internStartup2
+              confirm: message.soundsInteresting
+            - id: GiveItem
+              itemId: idea
+              amount: 2
+            - id: UpdateVariables
+              updates:
+                player.compute: clip(player.compute + 4, 0, 80)
+                player.hope: player.hope + 8
+                player.pubWeight: player.pubWeight + 1
+                player.citations: player.citations + randi(4) + 1
+                player.internCount: player.internCount + 1
+                player.researchIntern: 1
+        fail:
+        - id: DisplayMessage
+          message: message.noInternOffer
+          confirm: message.unfortunate
+        - id: UpdateVariable
+          variable: player.hope
+          value: player.hope - 3
     - message: message.slackOff
       requirement: itemCount('paper') < rule.papersRequired
       actions:
@@ -1345,34 +1453,72 @@
       player.citations: player.citations + randi(15) + 10
       player.pubWeight: player.pubWeight + 1
 # ===========================================================================
-# Summer internship at a frontier lab (compute + idea + reputation)
+# Internships
+#   - Apply yourself: a menu action (costs the month), success scales with rep.
+#   - Get headhunted: a recruiter / your advisor reaches out when your paper &
+#     citation count are high — a better, research-focused offer for free.
+# Different internships differ in compute and whether you can publish.
+# `interned` status (~10 months) limits you to roughly one internship per year.
 # ===========================================================================
-- id: InternshipOffer
-  trigger: YearBegin
-  once: true
-  probability: 0.6
+- id: RecruiterReachout
+  trigger: MonthBegin
+  probability: 0.5
   conditions:
   - id: Expression
-    expression: year >= 2 && year <= 5
+    expression: year >= 2 && month >= 1 && month <= 5 && !hasStatus('interned') && itemCount('paper') < rule.papersRequired && (player.pubWeight >= 2 || player.citations >= 60)
   actions:
   - id: DisplayChoices
-    message: message.internshipOffer
+    message: message.recruiterReachout
     choices:
     - message: message.acceptInternship
       actions:
-      - id: DisplayMessage
-        message: message.internshipAccepted
-        confirm: message.excited
-      - id: GiveItem
-        itemId: idea
-        amount: 1
-      - id: UpdateVariables
-        updates:
-          player.hope: player.hope + 10
-          advisor.fundingLevel: advisor.fundingLevel + 1
-          advisor.happiness: advisor.happiness - 1
-          player.compute: clip(player.compute + 6, 0, 40)
-          player.pubWeight: player.pubWeight + 1
+      - id: SetStatus
+        statusId: interned
+        on: true
+      - id: Random
+        groups:
+        # Frontier research lab: huge compute, you can publish, big reputation.
+        - weight: 1
+          actions:
+          - id: DisplayRandomMessage
+            messages:
+            - message.internFrontierLab1
+            - message.internFrontierLab2
+            confirm: message.party
+          - id: GiveItem
+            itemId: idea
+            amount: 1
+          - id: UpdateVariables
+            updates:
+              player.compute: clip(player.compute + 14, 0, 80)
+              player.hope: player.hope + 10
+              player.pubWeight: player.pubWeight + 2
+              player.citations: player.citations + randi(10) + 5
+              player.internCount: player.internCount + 1
+              player.researchIntern: 1
+              player.bigTechIntern: 1
+              advisor.happiness: advisor.happiness + 2
+        # Big-tech research lab: lots of compute, publishable.
+        - weight: 1
+          actions:
+          - id: DisplayRandomMessage
+            messages:
+            - message.internBigTechResearch1
+            - message.internBigTechResearch2
+            confirm: message.great
+          - id: GiveItem
+            itemId: idea
+            amount: 1
+          - id: UpdateVariables
+            updates:
+              player.compute: clip(player.compute + 10, 0, 80)
+              player.hope: player.hope + 8
+              player.pubWeight: player.pubWeight + 1
+              player.citations: player.citations + randi(6) + 2
+              player.internCount: player.internCount + 1
+              player.researchIntern: 1
+              player.bigTechIntern: 1
+              advisor.happiness: advisor.happiness + 1
     - message: message.declineInternship
       actions:
       - id: DisplayMessage
@@ -1381,21 +1527,8 @@
       - id: UpdateVariables
         updates:
           player.hope: player.hope + 2
-          advisor.happiness: advisor.happiness + 2
+          advisor.happiness: advisor.happiness + 1
 # Advisor nudges
-- id: QualifyReminder
-  trigger: MonthBegin
-  once: true
-  conditions:
-  - id: Expression
-    expression: month >= 6 && player.qualifyLevel <= 2
-  actions:
-  - id: DisplayMessage
-    message: message.qualifyReminder
-    confirm: message.gotit
-  - id: UpdateVariable
-    variable: advisor.happiness
-    value: advisor.happiness - 2
 - id: TooManyIdeas
   trigger: MonthBegin
   once: true
@@ -1436,3 +1569,101 @@
   - id: UpdateVariable
     variable: player.hope
     value: player.hope + 5
+# ===========================================================================
+# Graduation & final placement
+#   - You may graduate any time once you meet the bar (the thesis action).
+#   - From year 7 on, if you meet the bar, your advisor pushes you out.
+#   - On graduating, pick academia or industry; placement depends on your
+#     papers, citations and internship record (plus some luck).
+# ===========================================================================
+- id: ForcedGraduation
+  trigger: MonthBegin
+  once: true
+  conditions:
+  - id: Expression
+    expression: year >= 7 && itemCount('paper') >= rule.papersRequired && player.graduating === 0
+  actions:
+  - id: DisplayMessage
+    message: message.forcedGraduation
+    confirm: message.gotit
+  - id: UpdateVariable
+    variable: player.graduating
+    value: 1
+- id: Graduation
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: player.graduating === 1
+  actions:
+  - id: DisplayMessage
+    message: message.graduated
+    confirm: message.party
+  - id: DisplayChoices
+    message: message.chooseCareer
+    choices:
+    - message: message.goAcademia
+      actions:
+      - id: UpdateVariable
+        variable: player.finalScore
+        value: itemCount('paper') * 12 + player.citations / 8 + player.researchIntern * 10 + randi(20)
+      - id: Switch
+        branches:
+        - condition: player.finalScore >= 75
+          actions:
+          - id: EndGame
+            message: message.academiaTop
+            confirm: message.party
+            winning: true
+            fx: confetti
+        - condition: player.finalScore >= 48
+          actions:
+          - id: EndGame
+            message: message.academiaMid
+            confirm: message.party
+            winning: true
+            fx: confetti
+        - condition: player.finalScore >= 26
+          actions:
+          - id: EndGame
+            message: message.academiaPostdoc
+            confirm: message.great
+            winning: true
+        - condition: 1
+          actions:
+          - id: EndGame
+            message: message.academiaLow
+            confirm: message.ok
+            winning: true
+    - message: message.goIndustry
+      actions:
+      - id: UpdateVariable
+        variable: player.finalScore
+        value: itemCount('paper') * 7 + player.citations / 12 + player.bigTechIntern * 12 + player.researchIntern * 5 + randi(20)
+      - id: Switch
+        branches:
+        - condition: player.finalScore >= 65
+          actions:
+          - id: EndGame
+            message: message.industryTop
+            confirm: message.party
+            winning: true
+            fx: confetti
+        - condition: player.finalScore >= 40
+          actions:
+          - id: EndGame
+            message: message.industryMid
+            confirm: message.party
+            winning: true
+            fx: confetti
+        - condition: player.finalScore >= 22
+          actions:
+          - id: EndGame
+            message: message.industryGood
+            confirm: message.great
+            winning: true
+        - condition: 1
+          actions:
+          - id: EndGame
+            message: message.industryStartup
+            confirm: message.cool
+            winning: true
