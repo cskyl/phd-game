@@ -9,7 +9,7 @@ ui.status: "状态："
 ui.github: GitHub
 ui.helpButton: 帮助
 ui.helpTitle: 帮助
-ui.helpContent: "你是一名 AI 方向的博士生。每个月选择 **一项** 行动。研究流水线：刷 arXiv → 想法 → 跑实验（消耗 **算力**）→ 小规模结果 → 扩展（或砸大算力 **训练大模型**）→ SOTA 结果 → 消融/画图 → 写初稿 → **在真实会议截稿点投稿**（ICLR、ICML、NeurIPS、CVPR）→ 等几个月出结果。管理好你的 **GPU 算力**（左上角）——大项目要大预算。在顶会发表 **{{rule.papersRequired}} 篇论文** 才能毕业。**引用数**（右上角）积累你的声望，提高录用率、吓退抢发者。别让 **希望值** 归零。**审稿人二号有时真的很狠。**"
+ui.helpContent: "你是一名 AI 方向的博士生。每个月选择 **一项** 行动。研究流水线：刷 arXiv → 想法 → 跑实验（消耗 **算力**）→ 小规模结果 → 扩展（或砸大算力 **训练大模型**）→ SOTA 结果 → 消融/画图 → 写初稿 → **在真实会议截稿点投稿**（ICLR、ICML、NeurIPS、CVPR）→ 等几个月出结果。注意你的 **GPU 算力**（左上角）：它是 *每月* 的额度、**每月清零**——攒不起来，所以想训大模型得靠算力多的组、经费、实习或 fellowship，而不是省着攒。在顶会发表 **{{rule.papersRequired}} 篇论文** 才能毕业。**引用数**（右上角）积累你的声望，提高录用率、吓退抢发者。别让 **希望值** 归零。**审稿人二号有时真的很狠。**"
 ui.aboutButton: 关于
 ui.aboutTitle: 关于
 ui.aboutContent: "**AI 博士模拟器**——一款文字模拟游戏，体验机器学习博士生的日常：arXiv、算力预算、真实会议截稿、审稿人二号、rebuttal、引用、被抢发和 burnout。改编自 Mianzhi Wang 的原作 **PhD Simulator**（MIT 许可证）。支持中英双语，可在页脚切换。"
@@ -228,6 +228,9 @@ message.industryStartup: "**业界——创业公司。** 你作为早期 **ML �
 message.wellCitedNow: 你的论文引用数破了 **50**。大家开始把你当作 baseline 来引——审稿人认得这条线的工作，你的录用率也跟着涨了一点。
 message.influentialNow: 你的引用数破了 **200**，还收到了第一个 **invited talk** 邀请。你已经是领域里立得住的名字了——录用更容易，心态也更稳。
 message.paperCited: 你的一篇论文引用量在涨（X 上也多了几个关注者）。你感到被认可了。
+message.acceptedPoster: 是 **poster（海报）**。大多数论文都是——会进 proceedings，也会在 session 上被看到。至于有没有人引，那是另一回事了。
+message.acceptedSpotlight: 是 **spotlight**！在程序里被重点展示，还有个短报告——曝光不错，引用应该会跟上。
+message.acceptedOral: 是 **oral（口头报告）**！程序里最顶的位置，当众做完整报告。这种论文才是攒声望的——引用要来了。
 
 # ---------------------------------------------------------------------------
 # 被抢发
@@ -355,9 +358,9 @@ status.codeReleased.description: 你把工作开源了——可复现性更好�
 # 开局设置：难度 / 导师 / 方向
 # ---------------------------------------------------------------------------
 message.chooseDifficulty: 你希望你的博士有多难？
-message.diffEasy: "佛系（2 篇论文毕业）。"
-message.diffNormal: "正常（3 篇）。"
-message.diffHard: "地狱（4 篇，更容易被抢发）。"
+message.diffEasy: "佛系（3 篇论文毕业）。"
+message.diffNormal: "正常（4 篇）。"
+message.diffHard: "地狱（6 篇，更容易被抢发）。"
 message.chooseAdvisor: 你要加入哪位导师？
 message.advisorFamous: "**有名、算力多的大牛**（大组，放养）。"
 message.advisorFamousPicked: 你加入了一位明星教授的大组——H100 管够、推荐信很硬，但你是二十个学生之一，基本靠自己。

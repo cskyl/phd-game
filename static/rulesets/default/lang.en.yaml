@@ -9,7 +9,7 @@ ui.status: "Status:"
 ui.github: GitHub
 ui.helpButton: Help
 ui.helpTitle: Help
-ui.helpContent: "You are an AI PhD student. Each month, pick **one** action. The research pipeline: read arXiv → idea → run an experiment (costs **compute**) → a toy result → scale up (or **train a large model** with lots of compute) → a SOTA result → ablations/plots → write a draft → **submit at a real conference deadline** (ICLR, ICML, NeurIPS, CVPR) → wait months for reviews. Manage your **GPU compute** (top-left) — big projects need a big budget. Publish **{{rule.papersRequired}} papers** at top venues to graduate. **Citations** (top-right) build your reputation, raising acceptance odds and scaring off scoopers. Keep **Hope** above 0. **Reviewer 2 can be brutal.**"
+ui.helpContent: "You are an AI PhD student. Each month, pick **one** action. The research pipeline: read arXiv → idea → run an experiment (costs **compute**) → a toy result → scale up (or **train a large model** with lots of compute) → a SOTA result → ablations/plots → write a draft → **submit at a real conference deadline** (ICLR, ICML, NeurIPS, CVPR) → wait months for reviews. Watch your **GPU compute** (top-left): it's a *monthly* allowance that **resets each month** — you can't hoard it, so a large model needs a compute-rich lab, funding, an internship, or a fellowship, not saving up. Publish **{{rule.papersRequired}} papers** at top venues to graduate. **Citations** (top-right) build your reputation, raising acceptance odds and scaring off scoopers. Keep **Hope** above 0. **Reviewer 2 can be brutal.**"
 ui.aboutButton: About
 ui.aboutTitle: About
 ui.aboutContent: "**AI PhD Simulator** — a text-based simulation of life as a machine-learning PhD student: arXiv, GPU budgets, real conference deadlines, Reviewer 2, rebuttals, citations, scooping and burnout. Reskinned from the original **PhD Simulator** by Mianzhi Wang (MIT License). Bilingual: switch between English and 中文 in the footer."
@@ -228,6 +228,9 @@ message.industryStartup: "**INDUSTRY — STARTUP.** You join a scrappy AI startu
 message.wellCitedNow: Your papers crossed **50 citations**. People cite you as a baseline now — reviewers recognize the line of work, and your acceptance odds tick up.
 message.influentialNow: You crossed **200 citations** and got your first **invited talk**. You're an established name in the field now — acceptances come easier and your morale is steady.
 message.paperCited: One of your papers is picking up citations (and a few followers on X). You feel recognized.
+message.acceptedPoster: It's a **poster**. Most papers are — it'll go in the proceedings and get seen at the session. Whether anyone cites it is another matter.
+message.acceptedSpotlight: It's a **spotlight**! Highlighted in the program with a short talk — good visibility, and the citations should follow.
+message.acceptedOral: It's an **oral**! Top of the program, a full talk in front of everyone. This is the kind of paper that makes a reputation — citations incoming.
 
 # ---------------------------------------------------------------------------
 # Getting scooped
@@ -355,9 +358,9 @@ status.codeReleased.description: You open-sourced your work — better reproduci
 # Game setup: difficulty / advisor / subfield
 # ---------------------------------------------------------------------------
 message.chooseDifficulty: How hard do you want your PhD to be?
-message.diffEasy: "Chill (2 papers to graduate)."
-message.diffNormal: "Normal (3 papers)."
-message.diffHard: "Brutal (4 papers, more scooping)."
+message.diffEasy: "Chill (3 papers to graduate)."
+message.diffNormal: "Normal (4 papers)."
+message.diffHard: "Brutal (6 papers, more scooping)."
 message.chooseAdvisor: Which advisor will you join?
 message.advisorFamous: "A **famous, compute-rich PI** (big lab, hands-off)."
 message.advisorFamousPicked: You join a star professor's massive lab — H100s for days and a powerful recommendation letter, but you're one of 20 students and mostly on your own.
