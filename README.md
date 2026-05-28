@@ -13,15 +13,39 @@ unchanged; the AI theme and the Mandarin localization live entirely in the
 
 ## Gameplay
 
-Each month, pick **one** action. The research pipeline mirrors real ML work:
+Each month, pick **one** action. The research pipeline mirrors real ML work, and
+every experiment spends **GPU compute** (top-left meter):
 
 ```
-read papers (arXiv)  ->  Research Idea
-quick experiment     ->  Toy-Scale Result
-scale it up          ->  SOTA Result
-ablations / plots    ->  Plots  (x figuresRequired)
-write the paper      ->  Submission -> Accepted Paper (or Reviewer-2 rejection)
+read papers (arXiv)        ->  Research Idea          (free)
+run a quick experiment     ->  Toy-Scale Result       (-1 GPU)
+scale it up                ->  SOTA Result            (-3 GPU)
+  or: train a large model  ->  SOTA Result + figure   (-8 GPU, high impact)
+run ablations / plots      ->  Plots (x figuresRequired)  (-2 GPU each)
+write the paper            ->  Paper Draft
+submit at a real deadline  ->  Under Review -> Accepted Paper (or Reviewer-2 rejection)
 ```
+
+**Three systems give the game depth:**
+
+- **Compute budget** — `player.compute` regenerates each month, faster with more
+  funding and a better cluster (new H100 node, internship credits). Small
+  projects are always affordable; a large-model run needs you to save up, but
+  pays off with a high-impact result.
+- **Real conference calendar** — you hold a finished draft and submit it at a
+  real deadline; decisions arrive months later, just like real life:
+
+  | Venue | Submit (month) | Decision (month) |
+  |-------|----------------|------------------|
+  | ICML | Feb | May |
+  | NeurIPS | May | Sep |
+  | ICLR | Sep | Jan |
+  | CVPR | Nov | Feb |
+
+- **Citations** — `player.citations` (top-right meter) grow from published and
+  preprinted work, building reputation that raises acceptance odds (Well-Cited,
+  Influential statuses) and scares off scoopers. Post an arXiv preprint to stake
+  your claim early.
 
 Publish enough top-tier papers to graduate before your **Hope** hits 0 or you
 run out of time. Watch out for CUDA OOM, cluster outages, scooping on arXiv, and

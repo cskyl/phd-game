@@ -9,39 +9,43 @@ ui.status: "状态："
 ui.github: GitHub
 ui.helpButton: 帮助
 ui.helpTitle: 帮助
-ui.helpContent: "你是一名 AI 方向的博士生。每个月选择 **一项** 行动：刷 arXiv 读论文、把想法跑成小实验、把它扩展成 **SOTA 结果**、做消融实验画图，然后写论文投顶会。你需要在顶级会议上发表 **{{rule.papersRequired}} 篇论文** 才能毕业。注意你的 **希望值**——一旦归零，你就退学了。结果由随机数决定，所以被拒了别往心里去。**审稿人二号有时真的很狠。**"
+ui.helpContent: "你是一名 AI 方向的博士生。每个月选择 **一项** 行动。研究流水线：刷 arXiv → 想法 → 跑实验（消耗 **算力**）→ 小规模结果 → 扩展（或砸大算力 **训练大模型**）→ SOTA 结果 → 消融/画图 → 写初稿 → **在真实会议截稿点投稿**（ICLR、ICML、NeurIPS、CVPR）→ 等几个月出结果。管理好你的 **GPU 算力**（左上角）——大项目要大预算。在顶会发表 **{{rule.papersRequired}} 篇论文** 才能毕业。**引用数**（右上角）积累你的声望，提高录用率、吓退抢发者。别让 **希望值** 归零。**审稿人二号有时真的很狠。**"
 ui.aboutButton: 关于
 ui.aboutTitle: 关于
-ui.aboutContent: "**AI 博士模拟器**——一款文字模拟游戏，体验机器学习博士生的日常：arXiv、显卡、NeurIPS 截稿、审稿人二号、rebuttal、被抢发和 burnout。改编自 Mianzhi Wang 的原作 **PhD Simulator**（MIT 许可证）。支持中英双语，可在页脚切换。"
+ui.aboutContent: "**AI 博士模拟器**——一款文字模拟游戏，体验机器学习博士生的日常：arXiv、算力预算、真实会议截稿、审稿人二号、rebuttal、引用、被抢发和 burnout。改编自 Mianzhi Wang 的原作 **PhD Simulator**（MIT 许可证）。支持中英双语，可在页脚切换。"
 ui.seedButton: 随机种子
 ui.seedTitle: 随机种子
 ui.seedContent: "当前时间线的随机种子是 **{{@seed}}**。可分享链接：**``{{@seedUrl}}``**"
 ui.hopeMeter: 希望 {{player.hope}}/100
+ui.computeMeter: 算力 {{player.compute}}
+ui.citationMeter: 引用 {{player.citations}}
 ui.timeMeter: 第 {{year}} 年 第 {{month}} 月
 
 # ---------------------------------------------------------------------------
 # 物品
 # ---------------------------------------------------------------------------
 item.idea: 研究想法
-item.idea.description: 一个写在白板上的研究点子。先跑个小实验，看看有没有信号。
+item.idea.description: 一个写在白板上的研究点子。跑个小实验（消耗算力）看看有没有信号。
 item.preliminaryResult: 小规模结果
-item.preliminaryResult.description: 在小数据集（CIFAR 级别）上初见成效的结果。也许能扩展成真正拿得出手的成果。
+item.preliminaryResult.description: 在小数据集上初见成效的结果。把它扩展上去——或者训练一个大模型——就能做成拿得出手的成果。
 item.majorResult: SOTA 结果
-item.majorResult.description: 一个超越强基线的最先进结果。再配上 {{rule.figuresRequired}} 张扎实的图/消融，就能起草论文了。
+item.majorResult.description: 一个超越强基线的最先进结果。再配上 {{rule.figuresRequired}} 张扎实的图/消融，就能起草论文。
 item.figure: 图表 / 消融
-item.figure.description: 一张经得起推敲的干净图表或消融实验。凑齐 {{rule.figuresRequired}} 张并配上 SOTA 结果，就能起草论文。
-item.submittedPaper: 审稿中
-item.submittedPaper.description: 一篇挂在 OpenReview 上的投稿，正等待三位匿名审稿人（和领域主席）的裁决。
-item.resubmittedPaper: 重投·审稿中
-item.resubmittedPaper.description: 改投到下一个截稿点的修改稿，正在接受新一轮审稿。
-item.paper: 已录用论文
-item.paper.description: 一篇被顶级会议录用的论文。简历上实打实的一行！
+item.figure.description: 一张经得起推敲的干净图表或消融。凑齐 {{rule.figuresRequired}} 张并配上 SOTA 结果，就能起草论文。
+item.paperDraft: 论文初稿
+item.paperDraft.description: 一份写好的、可以投出去的稿子。等下一个会议截稿点（ICLR / ICML / NeurIPS / CVPR）来了再投。
+item.submittedICLR: ICLR 审稿中
+item.submittedICLR.description: 已投 ICLR，一月出结果。
+item.submittedICML: ICML 审稿中
+item.submittedICML.description: 已投 ICML，五月出结果。
+item.submittedNeurIPS: NeurIPS 审稿中
+item.submittedNeurIPS.description: 已投 NeurIPS，九月出结果。
+item.submittedCVPR: CVPR 审稿中
+item.submittedCVPR.description: 已投 CVPR，二月出结果。
 item.rejectedPaper: 被拒稿件
-item.rejectedPaper.description: 一篇被拒的投稿。回应审稿意见、打磨后改投下一个截稿点。
-item.conferencePaper: Workshop 论文
-item.conferencePaper.description: 一篇被接收的（非存档）研讨会论文。给你的想法插了面旗，别人就不太敢抢发了。
-item.submittedConfPaper: Workshop 投稿
-item.submittedConfPaper.description: 一篇等待快速评审的研讨会投稿。
+item.rejectedPaper.description: 一篇被拒的投稿。改成一份新的初稿，瞄准下一个截稿点。
+item.paper: 已录用论文
+item.paper.description: 一篇被顶级会议录用的论文。简历上实打实的一行——也是稳定的引用来源。
 
 # ---------------------------------------------------------------------------
 # 状态
@@ -50,14 +54,18 @@ status.firstYear: 新生热情
 status.firstYear.description: "每月 **+1 希望**。在收到第一封拒稿之前，一切都很令人兴奋。"
 status.brokenEquipment: 显卡集群宕机
 status.brokenEquipment.description: 集群连不上了。这个月没法跑实验。
-status.callForPapers: Workshop 征稿中
-status.callForPapers.description: 有个研讨会正在征稿。只要有小规模结果就能投一篇短文。
 status.upgradedEquipment: 新显卡节点
-status.upgradedEquipment.description: 导师搞到了一批崭新的 H100。你的实验更容易成功了。
+status.upgradedEquipment.description: 导师搞到了一批崭新的 H100。实验更容易成功，每月还能多回复一些算力。
 status.cloudStorage: 自动存档
 status.cloudStorage.description: checkpoint 会自动同步到云存储。崩了也不太容易丢结果。
+status.preprinted: arXiv 预印本已发
+status.preprinted.description: 你挂了预印本插旗占坑。被抢发的概率降低，还有稳定的引用涓流。
 status.strongRebuttal: 强力 Rebuttal
 status.strongRebuttal.description: 你写了一份有数据支撑、令人信服的 rebuttal。录用概率暂时提升。
+status.wellCited: 高被引
+status.wellCited.description: 你的工作开始受到关注。**录用率 +10%。**
+status.influential: 有影响力的研究者
+status.influential.description: 你现在在领域里小有名气。**录用率 +15%**，且每月 **+1 希望**。
 status.exhaustion: Burnout（精疲力竭）
 status.exhaustion.description: "每月 **-5 希望**。该离开终端歇一歇了。"
 status.lateYearAnxiety: 高年级焦虑
@@ -95,9 +103,10 @@ message.lateYearAnxiety: 已经第三年了。你看着一届又一届师兄师�
 # ---------------------------------------------------------------------------
 # 算力 / 经费
 # ---------------------------------------------------------------------------
+message.computeStarved: 你的 GPU 配额快用光了。在算力预算回血之前，大实验先别想了（经费越多、集群越好，算力回得越快）。
 message.fundingRises: "AI 新闻：大批新基金和企业捐赠涌入 ML 实验室。一位项目主管宣称：「算力就是新时代的石油。」"
 message.fundingFalls: "AI 新闻：显卡价格暴涨，本财年多项经费被冻结。各实验室的算力预算恐将收紧。"
-message.moreFunding: 导师拿到了一个新基金（外加一大笔云算力额度）。整个实验室都在庆祝。
+message.moreFunding: 导师拿到了一个新基金（外加一大笔云算力额度）。你每月的算力预算涨了。
 message.lessFunding: 导师的经费续期卡住了。实验室开始悄悄地限制 GPU 时长。
 message.lostFunding: 一笔云账单到期，某个项目的 **算力预算被砍**。实验室人心惶惶。
 
@@ -112,14 +121,14 @@ message.advisorHappyAgain: 导师对你最近的进展看起来很满意。
 # ---------------------------------------------------------------------------
 message.beginning: 恭喜——你被一所顶尖 AI 博士项目 **录取** 了。接受这个 offer 吗？
 message.acceptOffer: 接受 offer。
-message.acceptedOffer: 你接受了 offer 并加入了一个实验室。要毕业，你必须在顶级会议（NeurIPS / ICML / ICLR / CVPR / ACL 之类）上至少发表 **{{rule.papersRequired}} 篇论文**。
+message.acceptedOffer: 你接受了 offer 并加入了一个实验室。要毕业，你必须在顶级会议（ICLR、ICML、NeurIPS、CVPR）上至少发表 **{{rule.papersRequired}} 篇论文**。你起步只有一点 **GPU 预算**——省着点花。
 message.declineOffer: 拒绝，去大厂工作。
 message.declinedOffer: 你拒绝了 offer，转而接了一份高薪的研究工程师岗位。也许这才是更明智的时间线。
 message.newMonth: 新的一个月开始了。来看看待办清单。
 message.readPapers: 刷 arXiv 读论文。
 message.gainNewIdea1: 刷了一堆 arXiv 摘要后，一个 **新研究想法** 突然冒了出来。
 message.gainNewIdea2: 盯着某篇论文的相关工作看了几个小时，你发现了一个空白，得到了 **一个新想法**。
-message.workOnIdea: 把一个想法跑成小实验。
+message.workOnIdea: 跑个小实验（−1 算力）。
 message.oldIdea1: 你把想法讲给导师听，导师翻出一篇 2019 年的论文——人家早就做过一模一样的了。
 message.oldIdea2: 导师觉得这个想法太 incremental，让你想得更大一点。
 message.oldIdea3: 导师觉得新意不够，让你再多读读近期文献。
@@ -127,11 +136,14 @@ message.oldIdea4: 你灵感爆发想了一堆点子——结果在 Semantic Scho
 message.noIdea1: 你开了 60 个 arXiv 标签页，浏览器直接 **崩溃** 了。你彻底忘了自己刚才在读什么。
 message.gainPrelimResult: 这个想法在小数据集上出信号了！你有了一个 **小规模结果**。
 message.ideaNotWorking: 这个想法没跑出花来——和 baseline 没区别。换下一个吧。
-message.workOnPrelimResult: 把小规模结果扩展上去。
+message.workOnPrelimResult: 扩展小规模结果（−3 算力）。
 message.gainMajorResult: 它 scale 上去了！你超过了强基线，拿到了一个 **SOTA 结果**。
 message.noMajorResult1: 你确信这里面有真东西，但一上规模训练就发散。还得再花点时间。
 message.noMajorResult2: 导师发现了一个数据泄露的 bug，把你的指标都刷高了。回炉重造吧。
-message.workOnFigure: 跑消融实验、画图。
+message.trainLargeModel: 训练大模型（−8 算力，高影响力）。
+message.largeModelSuccess: 你砸了一大笔算力跑了个大规模实验——结果 **效果炸裂**。一个轰动的 SOTA 结果、一张惊艳的图，社区已经开始讨论了。
+message.largeModelFail: 大规模实验跑到一半 **发散** 了（先 NaN loss，再 OOM）。你白白烧掉了一大笔 GPU 机时。
+message.workOnFigure: 跑消融 / 画图（−2 算力）。
 message.gainFigure: 消融干净又有说服力。你做出了一张漂亮的 **图**。
 message.noFigure1: 结果噪声很大、不够显著。你需要更多随机种子和更多算力。
 message.noFigure2: 你的任务 **CUDA out of memory**，在第 47 个 epoch 挂了。得用 gradient checkpointing 重跑。
@@ -141,7 +153,7 @@ message.lostData: 一个节点跑到一半崩了，checkpoint 全没了。实验
 message.lostDataRecovered: 一个节点跑到一半崩了——但自动存档从云端 **恢复** 了一切，你顺利拿到了 **图**。
 message.wrongFigure: 你的几个数字互相矛盾，eval 里肯定有 bug。得花时间排查。
 message.workOnPaper: 写论文。
-message.draftPaperComplete: 你赶在 ddl 前写完了初稿并 **投出去** 了！
+message.draftPaperComplete: 你写完了 **初稿**。万事俱备——等下一个会议截稿点来了就投出去。
 message.draftPaperIncomplete1: 导师这一轮太忙，没来得及看你的稿子。
 message.draftPaperIncomplete2: 尽管你很努力，相关工作部分还得再补。没写完。
 message.draftPaperIncomplete3: 尽管你很努力，实验部分还需要更多分析。没写完。
@@ -149,7 +161,30 @@ message.draftPaperIncomplete4: 你整个月都在和 LaTeX 的图片排版以及
 message.draftPaperIncomplete5: 还有几个小节只写了一半。快了快了。
 message.draftPaperIncomplete6: 导师看完初稿，要求把摘要和引言彻底重写。
 message.draftPaperIncomplete7: 导师指出好几张图不够有说服力。你得再花时间改。
-message.paperAccepted: "OPENREVIEW：很高兴地通知你，你的投稿已被 **录用**！平均评分：strong accept。"
+message.postPreprint: 在 arXiv 上挂预印本。
+message.preprintPosted: 你把工作挂上了 **arXiv**，在别人抢发之前先插旗占坑。它开始积累早期引用，你的名字也传开了。
+message.revisePaper: 把被拒论文改成新的初稿。
+message.revisionComplete: 你逐条回应了审稿意见、补了人家要的实验，把拒稿打磨成了一份崭新的 **初稿**，可以瞄准下一个截稿点了。
+
+# --- 会议截稿与决定 ---
+message.deadlineICLR: "本月是 **ICLR 截稿**（一月出结果）。投出你的初稿吗？"
+message.submitICLR: 投 ICLR。
+message.submittedToICLR: 你在截稿前几分钟把所有材料传上 OpenReview，投了 **ICLR**。
+message.deadlineICML: "本月是 **ICML 截稿**（五月出结果）。投出你的初稿吗？"
+message.submitICML: 投 ICML。
+message.submittedToICML: 你赶在系统关闭前投了 **ICML**。
+message.deadlineNeurIPS: "本月是 **NeurIPS 截稿**（九月出结果）。投出你的初稿吗？"
+message.submitNeurIPS: 投 NeurIPS。
+message.submittedToNeurIPS: 你投了 **NeurIPS**——一年里竞争最激烈的会议。祝你好运。
+message.deadlineCVPR: "本月是 **CVPR 截稿**（二月出结果）。投出你的初稿吗？"
+message.submitCVPR: 投 CVPR。
+message.submittedToCVPR: 你卡着截稿点投了 **CVPR**。
+message.holdSubmission: 先压着——继续打磨，等更合适的会议。
+message.heldSubmission: 你决定等一个更契合这份工作的会议（或者只是想再补一个实验）。
+message.acceptedICLR: "OPENREVIEW：你的论文被 **ICLR 录用** 了！平均评分：strong accept。"
+message.acceptedICML: "OPENREVIEW：你的论文被 **ICML 录用** 了！准备去开会吧。"
+message.acceptedNeurIPS: "OPENREVIEW：你的论文被 **NeurIPS 录用** 了！简历上一行真正有分量的成果。"
+message.acceptedCVPR: "OPENREVIEW：你的论文被 **CVPR 录用** 了！恭喜。"
 message.paperRejected1: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。审稿人二号写道：「新意有限，相比已有工作只是 incremental 的改动。」"
 message.paperRejected2: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人在你的理论推导里发现了漏洞。"
 message.paperRejected3: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「提升都在噪声范围内，而且没报告 error bar。」"
@@ -157,13 +192,9 @@ message.paperRejected4: "OPENREVIEW：很遗憾地通知你，你的投稿被 **
 message.paperRejected5: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「为什么 work？没有任何洞见或分析。」"
 message.paperRejected6: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人觉得论文读不下去、符号前后不一致。"
 message.paperRejected7: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人质疑结果在你精挑细选的设置之外是否还成立。"
-message.paperRejected8: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「有点意思，但够不上 NeurIPS 级别的贡献。」"
+message.paperRejected8: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「有点意思，但够不上顶会级别的贡献。」"
 message.paperRejected9: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人要求在 ImageNet 规模的数据和一个 7B 模型上补实验。"
 message.paperRejected10: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「没有提供代码或可复现性声明。评分：3。」"
-message.revisePaper: 修改并重投被拒的论文。
-message.revisionComplete: 你逐条回应了审稿意见、补了人家要的实验，改投到了下一个截稿点。
-message.resubmittedPaperAccepted: "OPENREVIEW：好消息——你的重投稿件被 **录用** 了！"
-message.resubmittedPaperRejected1: "OPENREVIEW：很遗憾地通知你，你的重投又被 **拒** 了。（你抽到了同一个审稿人二号。）"
 message.slackOff: 摸鱼（出去透透气）。
 message.caughtSlackOff1: 导师发现你一周没上 Slack，甩给你一长串 TODO。
 message.caughtSlackOff2: 导师路过实验室，发现你的位置空着，发邮件问你进展。
@@ -173,6 +204,13 @@ message.lostAllHope: 你失去了所有希望，**退学** 去业界工作了。
 message.overdue: 你 **耗尽了时间**，没能完成博士学位。
 message.workOnThesis: 写论文并进行答辩。
 message.graduated: 恭喜！你把几篇论文装订成了毕业论文并通过了答辩。你 **拿到了博士学位**！从今天起请叫你「博士」。为自己骄傲吧！
+
+# ---------------------------------------------------------------------------
+# 引用
+# ---------------------------------------------------------------------------
+message.wellCitedNow: 你的论文引用数破了 **50**。大家开始把你当作 baseline 来引——审稿人认得这条线的工作，你的录用率也跟着涨了一点。
+message.influentialNow: 你的引用数破了 **200**，还收到了第一个 **invited talk** 邀请。你已经是领域里立得住的名字了——录用更容易，心态也更稳。
+message.paperCited: 你的一篇论文引用量在涨（X 上也多了几个关注者）。你感到被认可了。
 
 # ---------------------------------------------------------------------------
 # 被抢发
@@ -194,27 +232,21 @@ message.equipmentFixed: 你找到了挂掉的节点、把它 drain 掉并重新�
 message.equipmentNotFixed: 你折腾了好几个小时，队列还是卡着不动。
 message.equipmentFixedByTechSupport: 运维重启了机柜，你的任务又跑起来了。
 message.equipmentNotFixedByTechSupport: 运维在处理了，但问题比预想的更深，还得再修一阵子。
-message.newEquipment: 导师给实验室买了一台崭新的 **H100 节点**。所有人都乐疯了。
+message.newEquipment: 导师给实验室买了一台崭新的 **H100 节点**。每月算力更多，实验也更容易成功。
 message.cloudStorage: "实验室公告：组里配置了到云存储的 **自动 checkpoint**。你的 run 现在安全了。"
 
 # ---------------------------------------------------------------------------
-# Workshop / 会议周期
+# 会议出差
 # ---------------------------------------------------------------------------
-message.callForPapers: 一个 **NeurIPS workshop** 刚刚开始征稿，投稿窗口持续 **6 个月**——只要你有一个小规模结果，就能投一篇短文。
-message.workOnConf: 写一篇 workshop 论文。
-message.finishedConfPaper: 你写完了 workshop 论文并投了出去！
-message.confPaperRejected: 你的 workshop 投稿被 **拒** 了——审稿人觉得还不够成熟。不过这个结果你还能继续做。
-message.confPaperAccepted1: "收件箱：你的工作被 workshop 接收为 **海报（poster）**。该做海报了。"
-message.confPaperAccepted2: "收件箱：你的工作被 workshop 接收为 **spotlight 报告**。恭喜！"
-message.attendConf: 你抵达 **NeurIPS** 会议中心并完成了你的报告。来看看明天的日程安排。
+message.attendConf: 你去开会、做了报告、认识了一大堆人。来看看明天的日程安排。
 message.skipConfSession: 翘掉会议，去逛逛这座城市。
 message.confNiceTour1: 这座城市美极了，散完步回来你元气满满。
 message.confNiceTour2: 你发现了一家很棒的小馆子，吃得相当满足。
 message.skipConfSessionFail1: 翘会的时候你撞见了导师。尴尬。
 message.skipConfSessionFail2: 导师在实验室的海报前找你，结果没找到。
 message.attendConfSession: 去听报告，在 poster session 上社交。
-message.confNewIdea: 你听了一个很赞的报告，会后在海报前一聊，蹦出了 **一个新想法**。
-message.confNoNewIdea: 报告很精彩，会议晚宴更精彩。
+message.confNewIdea: 你听了一个很赞的报告，会后在海报前一聊，蹦出了 **一个新想法**——还多了几个引用。
+message.confNoNewIdea: 报告很精彩，晚宴更精彩，还有几个人告诉你他们在引用你的工作。
 
 # ---------------------------------------------------------------------------
 # 导师提醒
@@ -225,7 +257,7 @@ message.notEnoughPapers: 导师催你的发表数量，显然急着想看到更�
 message.rejectedPaperAdvisor: 导师就这次拒稿给你发消息：「别被审稿人二号影响。冷静一下、回应意见、改投。」
 
 # ---------------------------------------------------------------------------
-# Rebuttal 阶段（新增）
+# Rebuttal 阶段
 # ---------------------------------------------------------------------------
 message.rebuttalPeriod: 审稿意见出来了，**rebuttal 阶段** 开始了。分数有高有低。你要花一周写 rebuttal 吗？
 message.writeRebuttal: 写一份有数据支撑的强力 rebuttal。
@@ -234,18 +266,17 @@ message.skipRebuttal: 算了——分数不会动的。
 message.rebuttalSkipped: 你觉得结局已定，放弃了写 rebuttal。
 
 # ---------------------------------------------------------------------------
-# 业界实习（新增）
+# 业界实习
 # ---------------------------------------------------------------------------
 message.internshipOffer: 一家顶级业界实验室（某前沿大模型团队）给你发来 **暑期研究实习** 邀请——海量算力、聪明的 mentor，还有可能发一篇论文。接吗？
 message.acceptInternship: 接受实习。
-message.internshipAccepted: 你用着几乎无限的 GPU、和一群聪明的合作者度过了一个夏天。回来时你带回了 **一个新想法**、新的算力额度和满满的干劲——尽管导师有点希望你留下来推进毕业论文。
+message.internshipAccepted: 你用着几乎无限的 GPU、和一群聪明的合作者度过了一个夏天。回来时你带回了 **一个新想法**、一大笔算力额度、更高的声望和满满的干劲——尽管导师有点希望你留下来推进毕业论文。
 message.declineInternship: 留下来专注毕业论文。
 message.internshipDeclined: 你婉拒了邀请，留下来专注自己的研究。导师对你的投入感到很欣慰。
 
 # ---------------------------------------------------------------------------
 # 随机士气事件
 # ---------------------------------------------------------------------------
-message.paperCited: 你最近的论文引用量在涨（X 上也多了几个关注者）。你感到被认可了。
 message.seminar1: 这个月你参加了一场组会 seminar，讲者的 slides 让你蹦出了 **一个新想法**。
 message.seminar2: 这个月你参加了一场 seminar，Q&A 里一个犀利的问题给了你 **一个新想法**。
 message.seminar3: 一位杰出讲者做了一场鼓舞人心的报告，你突然有了 **一个新想法**。
@@ -255,8 +286,8 @@ message.randomHope2: 校园附近有一场免费露天音乐会。你让音乐�
 message.randomHope3: 实验室办了一场论文录用庆功会。美食与好友相伴，你感觉好多了。
 message.randomHope4: 你公寓附近新开了一家拉面店。你去吃了，太好吃了，感觉好多了。
 message.randomHope5: 购物车里那把机械键盘终于打折了。你秒下单，心情大好。
-message.modelViral1: 你开源了你的模型，它冲上了 **Hugging Face 热榜**。你的 GitHub star 数在疯涨。
-message.modelViral2: 你方法的一个 demo 一夜之间在 **X 上爆火**。连一位知名研究者都转发了。
+message.modelViral1: 你开源了你的模型，它冲上了 **Hugging Face 热榜**。star 数和引用数都在疯涨。
+message.modelViral2: 你方法的一个 demo 一夜之间在 **X 上爆火**。连一位知名研究者都转发了，引用也滚滚而来。
 
 # ---------------------------------------------------------------------------
 # 确认按钮

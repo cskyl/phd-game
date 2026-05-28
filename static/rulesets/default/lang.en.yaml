@@ -9,39 +9,43 @@ ui.status: "Status:"
 ui.github: GitHub
 ui.helpButton: Help
 ui.helpTitle: Help
-ui.helpContent: "You are an AI PhD student. Each month, pick **one** action: read papers (arXiv), turn an idea into a quick experiment, scale it into a **SOTA result**, run ablations to get plots, then write a paper and submit to a top venue. You need **{{rule.papersRequired}} accepted papers** at top-tier conferences to graduate. Watch your **Hope** — if it hits 0, you drop out. Outcomes are decided by a random number generator, so do not take rejections personally. **Reviewer 2 can be brutal.**"
+ui.helpContent: "You are an AI PhD student. Each month, pick **one** action. The research pipeline: read arXiv → idea → run an experiment (costs **compute**) → a toy result → scale up (or **train a large model** with lots of compute) → a SOTA result → ablations/plots → write a draft → **submit at a real conference deadline** (ICLR, ICML, NeurIPS, CVPR) → wait months for reviews. Manage your **GPU compute** (top-left) — big projects need a big budget. Publish **{{rule.papersRequired}} papers** at top venues to graduate. **Citations** (top-right) build your reputation, raising acceptance odds and scaring off scoopers. Keep **Hope** above 0. **Reviewer 2 can be brutal.**"
 ui.aboutButton: About
 ui.aboutTitle: About
-ui.aboutContent: "**AI PhD Simulator** — a text-based simulation of life as a machine-learning PhD student: arXiv, GPUs, NeurIPS deadlines, Reviewer 2, rebuttals, scooping and burnout. Reskinned from the original **PhD Simulator** by Mianzhi Wang (MIT License). Bilingual: switch between English and 中文 in the footer."
+ui.aboutContent: "**AI PhD Simulator** — a text-based simulation of life as a machine-learning PhD student: arXiv, GPU budgets, real conference deadlines, Reviewer 2, rebuttals, citations, scooping and burnout. Reskinned from the original **PhD Simulator** by Mianzhi Wang (MIT License). Bilingual: switch between English and 中文 in the footer."
 ui.seedButton: Seed
 ui.seedTitle: Seed
 ui.seedContent: "The seed for the current timeline is **{{@seed}}**. Shareable link: **``{{@seedUrl}}``**"
 ui.hopeMeter: Hope {{player.hope}}/100
+ui.computeMeter: GPU {{player.compute}}
+ui.citationMeter: Citations {{player.citations}}
 ui.timeMeter: Year {{year}} Month {{month}}
 
 # ---------------------------------------------------------------------------
 # Items
 # ---------------------------------------------------------------------------
 item.idea: Research Idea
-item.idea.description: A spark of a research idea, scribbled on a whiteboard. Run a quick experiment to see if it has any signal.
+item.idea.description: A spark of a research idea, scribbled on a whiteboard. Run a quick experiment (costs compute) to see if it has any signal.
 item.preliminaryResult: Toy-Scale Result
-item.preliminaryResult.description: A promising result on a tiny benchmark (CIFAR-sized). It might scale into a real, headline result.
+item.preliminaryResult.description: A promising result on a tiny benchmark. Scale it up — or train a large model — to turn it into a headline result.
 item.majorResult: SOTA Result
 item.majorResult.description: A state-of-the-art result that beats the strong baselines. With {{rule.figuresRequired}} solid plots / ablations, you can draft a paper.
 item.figure: Plot / Ablation
-item.figure.description: A clean figure or ablation table that survives scrutiny. With {{rule.figuresRequired}} of them plus a SOTA result, you can draft a paper.
-item.submittedPaper: Under Review
-item.submittedPaper.description: A submission sitting on OpenReview, awaiting the verdict of three anonymous reviewers (and an AC).
-item.resubmittedPaper: Resubmission Under Review
-item.resubmittedPaper.description: A revised submission sent to the next deadline, awaiting another round of reviews.
-item.paper: Accepted Paper
-item.paper.description: An accepted paper at a top-tier conference. A real line on your CV!
+item.figure.description: A clean figure or ablation that survives scrutiny. With {{rule.figuresRequired}} of them plus a SOTA result, you can draft a paper.
+item.paperDraft: Paper Draft
+item.paperDraft.description: A finished manuscript, ready to submit. Wait for the next conference deadline (ICLR / ICML / NeurIPS / CVPR) and submit it.
+item.submittedICLR: Under Review @ ICLR
+item.submittedICLR.description: Submitted to ICLR. Decisions come out in January.
+item.submittedICML: Under Review @ ICML
+item.submittedICML.description: Submitted to ICML. Decisions come out in May.
+item.submittedNeurIPS: Under Review @ NeurIPS
+item.submittedNeurIPS.description: Submitted to NeurIPS. Decisions come out in September.
+item.submittedCVPR: Under Review @ CVPR
+item.submittedCVPR.description: Submitted to CVPR. Decisions come out in February.
 item.rejectedPaper: Rejected Submission
-item.rejectedPaper.description: A rejected submission. Address the reviews, polish, and resubmit to the next deadline.
-item.conferencePaper: Workshop Paper
-item.conferencePaper.description: An accepted (non-archival) workshop paper. Plants a flag on your idea so others are less likely to scoop you.
-item.submittedConfPaper: Workshop Submission
-item.submittedConfPaper.description: A workshop submission awaiting a quick review.
+item.rejectedPaper.description: A rejected submission. Revise it into a fresh draft and aim for the next deadline.
+item.paper: Accepted Paper
+item.paper.description: An accepted paper at a top-tier conference. A real line on your CV — and a steady source of citations.
 
 # ---------------------------------------------------------------------------
 # Status effects
@@ -50,14 +54,18 @@ status.firstYear: First-Year Hype
 status.firstYear.description: "**+1 hope** every month. Everything is exciting before your first rejection."
 status.brokenEquipment: GPU Cluster Down
 status.brokenEquipment.description: The cluster is unreachable. You cannot run experiments this month.
-status.callForPapers: Workshop CFP Open
-status.callForPapers.description: A workshop is calling for papers. With a toy-scale result you can submit a short paper.
 status.upgradedEquipment: New GPU Node
-status.upgradedEquipment.description: Your advisor secured fresh H100s. Your experiments are more likely to succeed.
+status.upgradedEquipment.description: Your advisor secured fresh H100s. Experiments are more likely to succeed and you regenerate more compute each month.
 status.cloudStorage: Auto-Checkpointing
 status.cloudStorage.description: Checkpoints are synced to a cloud bucket automatically. A crash is far less likely to wipe your results.
+status.preprinted: arXiv Preprint Out
+status.preprinted.description: You have a preprint staking your claim. Lower chance of being scooped, plus a steady citation trickle.
 status.strongRebuttal: Strong Rebuttal
 status.strongRebuttal.description: You wrote a compelling, data-backed rebuttal. Your acceptance odds are temporarily boosted.
+status.wellCited: Well-Cited
+status.wellCited.description: Your work is getting noticed. **+10% acceptance odds.**
+status.influential: Influential Researcher
+status.influential.description: You are a name in the field now. **+15% acceptance odds** and **+1 hope** every month.
 status.exhaustion: Burnout
 status.exhaustion.description: "**-5 hope** every month. Time to step away from the terminal and rest."
 status.lateYearAnxiety: Senior-Student Anxiety
@@ -66,7 +74,7 @@ status.unhappyAdvisor: Unhappy Advisor
 status.unhappyAdvisor.description: "**-5 hope** every month. Your advisor is not impressed with your recent progress."
 
 # ---------------------------------------------------------------------------
-# Qualifying / prelim exam
+# Qualifying exam
 # ---------------------------------------------------------------------------
 message.qualifyNotice: "DEPARTMENT NOTICE: All PhD students must pass the **qualifying exam in December**."
 message.prepareQualify: Study for the qualifying exam.
@@ -95,9 +103,10 @@ message.lateYearAnxiety: Three years in. You have watched cohort after cohort de
 # ---------------------------------------------------------------------------
 # Compute budget / funding
 # ---------------------------------------------------------------------------
+message.computeStarved: Your GPU quota is nearly exhausted. Big experiments are off the table until your compute budget refills (it grows faster with more funding and a better cluster).
 message.fundingRises: "AI NEWS: a wave of new grants and industry gifts is flowing into ML labs. \"Compute is the new oil,\" a program manager declared."
 message.fundingFalls: "AI NEWS: GPU prices spiked and several grants were frozen this fiscal year. Compute budgets are likely to tighten."
-message.moreFunding: Your advisor landed a new grant (and a pile of cloud credits). The whole lab celebrated.
+message.moreFunding: Your advisor landed a new grant (and a pile of cloud credits). Your monthly compute budget went up.
 message.lessFunding: Your advisor's grant renewal stalled. The lab quietly started rationing GPU hours.
 message.lostFunding: A cloud bill came due and one project's **compute budget was slashed**. The lab is on edge.
 
@@ -112,14 +121,14 @@ message.advisorHappyAgain: Your advisor seems genuinely pleased with your recent
 # ---------------------------------------------------------------------------
 message.beginning: Congratulations — you've been **admitted** to a top AI PhD program. Will you accept the offer?
 message.acceptOffer: Accept the offer.
-message.acceptedOffer: You accepted and joined a lab. To graduate, you must publish at least **{{rule.papersRequired}} papers** at top-tier conferences (think NeurIPS / ICML / ICLR / CVPR / ACL).
+message.acceptedOffer: You accepted and joined a lab. To graduate, you must publish at least **{{rule.papersRequired}} papers** at top-tier conferences (ICLR, ICML, NeurIPS, CVPR). You start with a small **GPU budget** — spend it wisely.
 message.declineOffer: Decline and take the big-tech job.
 message.declinedOffer: You declined the offer and took a well-paid research-engineer role instead. Perhaps the wiser timeline.
 message.newMonth: A new month begins. Let's check the to-do list.
 message.readPapers: Read papers on arXiv.
-message.gainNewIdea1: After scrolling through arXiv-sanity and a dozen abstracts, a **new research idea** clicked.
+message.gainNewIdea1: After scrolling through arXiv and a dozen abstracts, a **new research idea** clicked.
 message.gainNewIdea2: After staring at a related-work section for hours, you spotted a gap and got a **new idea**.
-message.workOnIdea: Run a quick experiment on an idea.
+message.workOnIdea: Run a quick experiment (−1 GPU).
 message.oldIdea1: You pitched the idea to your advisor, who pulled up a 2019 paper that already did exactly this.
 message.oldIdea2: Your advisor thought the idea was incremental and asked you to think bigger.
 message.oldIdea3: Your advisor felt the idea was not novel enough and told you to read more of the recent literature.
@@ -127,11 +136,14 @@ message.oldIdea4: You had a burst of ideas — but a quick Semantic Scholar sear
 message.noIdea1: You opened 60 arXiv tabs and your browser **crashed**. You lost track of everything you were reading.
 message.gainPrelimResult: The idea shows signal on a toy benchmark! You have a **toy-scale result**.
 message.ideaNotWorking: The idea flatlined — no better than the baseline. On to the next one.
-message.workOnPrelimResult: Scale up a toy-scale result.
+message.workOnPrelimResult: Scale up a toy result (−3 GPU).
 message.gainMajorResult: It scales! You beat the strong baselines and have a **SOTA result**.
 message.noMajorResult1: You're sure there's a real result here, but training keeps diverging at scale. You need more time.
 message.noMajorResult2: Your advisor spotted a data-leakage bug that inflated your numbers. Back to the drawing board.
-message.workOnFigure: Run ablations and make plots.
+message.trainLargeModel: Train a large model (−8 GPU, high impact).
+message.largeModelSuccess: You burned a huge chunk of compute on a large-scale run — and it **worked spectacularly**. A headline SOTA result, a striking figure, and the community is already talking about it.
+message.largeModelFail: The large run **diverged** halfway through (NaN loss, then OOM). You torched a small fortune in GPU hours for nothing.
+message.workOnFigure: Run ablations / make plots (−2 GPU).
 message.gainFigure: The ablations are clean and convincing. You produced a beautiful **plot**.
 message.noFigure1: The runs came back noisy and inconclusive. You'll need more seeds and more compute.
 message.noFigure2: Your job hit **CUDA out of memory** and died at epoch 47. Time to redo it with gradient checkpointing.
@@ -140,8 +152,8 @@ message.noFigure4: A dependency upgrade broke your environment. You burned days 
 message.lostData: A node crashed mid-run and your checkpoints were lost. You'll have to rerun the experiments.
 message.lostDataRecovered: A node crashed mid-run — but auto-checkpointing **restored** everything from the cloud bucket, and you got your **plot**.
 message.wrongFigure: Your numbers contradict each other; there's a bug somewhere in the eval. You need time to track it down.
-message.workOnPaper: Write the paper.
-message.draftPaperComplete: You finished the draft and **submitted** it before the deadline!
+message.workOnPaper: Write up the paper.
+message.draftPaperComplete: You finished the **draft**. It's ready — now wait for the next conference deadline to submit it.
 message.draftPaperIncomplete1: Your advisor was too swamped to read the draft this cycle.
 message.draftPaperIncomplete2: Despite your efforts, the related-work section still needs work. Not done yet.
 message.draftPaperIncomplete3: Despite your efforts, the experiments section needs more analysis. Not done yet.
@@ -149,7 +161,30 @@ message.draftPaperIncomplete4: You spent the whole month fighting LaTeX figure p
 message.draftPaperIncomplete5: There are still a couple of sections half-written. Almost there.
 message.draftPaperIncomplete6: Your advisor read the draft and wants the abstract and intro completely rewritten.
 message.draftPaperIncomplete7: Your advisor flagged several figures as unconvincing. You'll need more time to fix them.
-message.paperAccepted: "OPENREVIEW: We are delighted to inform you that your submission has been **ACCEPTED**! Average rating: strong accept."
+message.postPreprint: Post a preprint on arXiv.
+message.preprintPosted: You posted your work to **arXiv**, staking your claim before someone scoops you. It starts picking up early citations and your name gets around.
+message.revisePaper: Revise a rejected paper into a fresh draft.
+message.revisionComplete: You addressed the reviews point by point, ran the requested experiments, and turned the rejection into a polished new **draft**, ready for the next deadline.
+
+# --- Conference deadlines & decisions ---
+message.deadlineICLR: "**ICLR deadline** is this month (decisions in January). Submit your draft?"
+message.submitICLR: Submit to ICLR.
+message.submittedToICLR: You submitted to **ICLR** and uploaded everything to OpenReview minutes before the deadline.
+message.deadlineICML: "**ICML deadline** is this month (decisions in May). Submit your draft?"
+message.submitICML: Submit to ICML.
+message.submittedToICML: You submitted to **ICML** just before the portal closed.
+message.deadlineNeurIPS: "**NeurIPS deadline** is this month (decisions in September). Submit your draft?"
+message.submitNeurIPS: Submit to NeurIPS.
+message.submittedToNeurIPS: You submitted to **NeurIPS** — the most competitive venue of the year. Good luck.
+message.deadlineCVPR: "**CVPR deadline** is this month (decisions in February). Submit your draft?"
+message.submitCVPR: Submit to CVPR.
+message.submittedToCVPR: You submitted to **CVPR** right at the deadline.
+message.holdSubmission: Hold it — keep polishing for a better-fit venue.
+message.heldSubmission: You decided to wait for a venue that fits the work better (or just to add one more experiment).
+message.acceptedICLR: "OPENREVIEW: Your paper has been **ACCEPTED to ICLR**! Average rating: strong accept."
+message.acceptedICML: "OPENREVIEW: Your paper has been **ACCEPTED to ICML**! Off to the conference."
+message.acceptedNeurIPS: "OPENREVIEW: Your paper has been **ACCEPTED to NeurIPS**! A line on your CV that actually matters."
+message.acceptedCVPR: "OPENREVIEW: Your paper has been **ACCEPTED to CVPR**! Congratulations."
 message.paperRejected1: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. Reviewer 2 wrote: \"Novelty is limited; this is an incremental delta over prior work.\""
 message.paperRejected2: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer found a flaw in your theoretical derivation."
 message.paperRejected3: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer wrote: \"The improvements are within noise; no error bars are reported.\""
@@ -157,13 +192,9 @@ message.paperRejected4: "OPENREVIEW: We regret to inform you that your submissio
 message.paperRejected5: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer wrote: \"Why does it work? No insight or analysis is provided.\""
 message.paperRejected6: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer found the paper unreadable and the notation inconsistent."
 message.paperRejected7: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer questioned whether results hold beyond your cherry-picked setting."
-message.paperRejected8: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer wrote: \"Interesting, but not a NeurIPS-level contribution.\""
+message.paperRejected8: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer wrote: \"Interesting, but not a top-venue-level contribution.\""
 message.paperRejected9: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer demanded experiments on ImageNet-scale data and a 7B model."
 message.paperRejected10: "OPENREVIEW: We regret to inform you that your submission has been **REJECTED**. A reviewer wrote: \"No code or reproducibility statement provided. Score: 3.\""
-message.revisePaper: Revise and resubmit a rejected paper.
-message.revisionComplete: You addressed the reviews point by point, ran the requested experiments, and resubmitted to the next deadline.
-message.resubmittedPaperAccepted: "OPENREVIEW: Great news — your resubmission has been **ACCEPTED**!"
-message.resubmittedPaperRejected1: "OPENREVIEW: We regret to inform you that your resubmission was **REJECTED** again. (You drew the same Reviewer 2.)"
 message.slackOff: Slack off (touch grass).
 message.caughtSlackOff1: Your advisor caught you off Slack for a week and pinged you a long list of TODOs.
 message.caughtSlackOff2: Your advisor stopped by the lab, found your seat empty, and emailed asking about your progress.
@@ -173,6 +204,13 @@ message.lostAllHope: You lost all hope and **dropped out** to take an industry j
 message.overdue: You **ran out of time** and could not finish your PhD.
 message.workOnThesis: Write and defend your thesis.
 message.graduated: Congratulations! You stapled your papers into a thesis and passed your defense. You **earned your PhD**! Dr. You-Now. Be proud!
+
+# ---------------------------------------------------------------------------
+# Citations
+# ---------------------------------------------------------------------------
+message.wellCitedNow: Your papers crossed **50 citations**. People cite you as a baseline now — reviewers recognize the line of work, and your acceptance odds tick up.
+message.influentialNow: You crossed **200 citations** and got your first **invited talk**. You're an established name in the field now — acceptances come easier and your morale is steady.
+message.paperCited: One of your papers is picking up citations (and a few followers on X). You feel recognized.
 
 # ---------------------------------------------------------------------------
 # Getting scooped
@@ -194,27 +232,21 @@ message.equipmentFixed: You found the dead node, drained it, and resubmitted you
 message.equipmentNotFixed: You poked at it for hours, but the queue is still stuck.
 message.equipmentFixedByTechSupport: The sysadmins rebooted the rack and your jobs are running again.
 message.equipmentNotFixedByTechSupport: The sysadmins are on it, but the issue is deeper than expected and will take longer to fix.
-message.newEquipment: Your advisor bought a fresh **H100 node** for the lab. Everyone was thrilled.
+message.newEquipment: Your advisor bought a fresh **H100 node** for the lab. More compute every month, and experiments succeed more often.
 message.cloudStorage: "LAB NEWS: the group set up **automatic checkpointing** to a cloud bucket. Your runs are safe now."
 
 # ---------------------------------------------------------------------------
-# Workshop / conference cycle
+# Conference travel
 # ---------------------------------------------------------------------------
-message.callForPapers: A **NeurIPS workshop** just opened its call for papers. Submissions are open for the next **6 months** — if you have a toy-scale result, you can submit a short paper.
-message.workOnConf: Write a workshop paper.
-message.finishedConfPaper: You wrote up the workshop paper and submitted it!
-message.confPaperRejected: Your workshop submission was **REJECTED** — the reviewers weren't convinced it was ready. You can keep developing the result, though.
-message.confPaperAccepted1: "INBOX: Your work was **ACCEPTED** as a **poster** at the workshop. Time to make a poster."
-message.confPaperAccepted2: "INBOX: Your work was **ACCEPTED** for a **spotlight talk** at the workshop. Congrats!"
-message.attendConf: You arrive at the **NeurIPS** convention center and give your presentation. Let's see what's on tomorrow's schedule.
+message.attendConf: You travel to the conference, present your work, and meet a lot of people. Let's see what's on tomorrow's schedule.
 message.skipConfSession: Skip the sessions and explore the city.
 message.confNiceTour1: The city is gorgeous and you came back from the walk recharged.
 message.confNiceTour2: You found an amazing hole-in-the-wall restaurant and ate very well.
 message.skipConfSessionFail1: You bumped into your advisor while skipping a session. Awkward.
 message.skipConfSessionFail2: Your advisor looked for you at the lab's poster and couldn't find you.
 message.attendConfSession: Attend talks and network at the poster sessions.
-message.confNewIdea: You caught a brilliant talk and, chatting at a poster afterward, landed **a new idea**.
-message.confNoNewIdea: The talks were great and the conference dinner was even better.
+message.confNewIdea: You caught a brilliant talk and, chatting at a poster afterward, landed **a new idea** — and a few new citations.
+message.confNoNewIdea: The talks were great, the dinner better, and a few people told you they're citing your work.
 
 # ---------------------------------------------------------------------------
 # Advisor nudges
@@ -225,7 +257,7 @@ message.notEnoughPapers: Your advisor pinged you about your publication count, c
 message.rejectedPaperAdvisor: 'Your advisor messaged you about the rejection: "Don''t let Reviewer 2 get to you. Cool off, address the comments, resubmit."'
 
 # ---------------------------------------------------------------------------
-# Rebuttal period (new)
+# Rebuttal period
 # ---------------------------------------------------------------------------
 message.rebuttalPeriod: The reviews are in and the **rebuttal period** has opened. The scores are mixed. Will you spend the week writing a rebuttal?
 message.writeRebuttal: Write a strong, data-backed rebuttal.
@@ -234,18 +266,17 @@ message.skipRebuttal: Don't bother — the scores won't move.
 message.rebuttalSkipped: You decided the decision was already made and skipped the rebuttal.
 
 # ---------------------------------------------------------------------------
-# Industry internship (new)
+# Industry internship
 # ---------------------------------------------------------------------------
 message.internshipOffer: A top industry lab (think a frontier-model team) offers you a **summer research internship** — huge compute, smart mentors, and a possible publication. Take it?
 message.acceptInternship: Accept the internship.
-message.internshipAccepted: You spent the summer with near-unlimited GPUs and brilliant collaborators. You came back with **a new idea**, fresh compute credits, and renewed energy — though your advisor wished you'd stayed to push your thesis.
+message.internshipAccepted: You spent the summer with near-unlimited GPUs and brilliant collaborators. You came back with **a new idea**, a big pile of compute credits, more reputation, and renewed energy — though your advisor wished you'd stayed to push your thesis.
 message.declineInternship: Stay and focus on your thesis.
 message.internshipDeclined: You turned it down to stay focused on your own research. Your advisor was pleased with your commitment.
 
 # ---------------------------------------------------------------------------
 # Random morale events
 # ---------------------------------------------------------------------------
-message.paperCited: Your recent paper is picking up citations (and a few followers on X). You feel recognized.
 message.seminar1: You attended a lab seminar this month; the speaker's slides sparked **a new idea**.
 message.seminar2: You attended a seminar this month; a sharp question in the Q&A gave you **a new idea**.
 message.seminar3: A distinguished speaker gave an inspiring colloquium and you suddenly had **a new idea**.
@@ -255,8 +286,8 @@ message.randomHope2: There was a free outdoor concert near campus. You let the m
 message.randomHope3: Your lab threw a paper-acceptance party. Great food, great people. You felt much better.
 message.randomHope4: A new ramen place opened near your apartment. You went, it was incredible, and you felt much better.
 message.randomHope5: The mechanical keyboard in your cart finally went on sale. You bought it instantly and felt great.
-message.modelViral1: You open-sourced your model and it hit the **top of Hugging Face trending**. Your GitHub stars are exploding.
-message.modelViral2: A demo of your method went **viral on X** overnight. Even a famous researcher reposted it.
+message.modelViral1: You open-sourced your model and it hit the **top of Hugging Face trending**. Stars — and citations — are exploding.
+message.modelViral2: A demo of your method went **viral on X** overnight. Even a famous researcher reposted it, and the citations are rolling in.
 
 # ---------------------------------------------------------------------------
 # Confirm buttons
