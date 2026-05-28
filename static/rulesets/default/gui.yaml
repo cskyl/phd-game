@@ -27,6 +27,10 @@ statsBar:
     side: right
     updateTrigger:
       variables: ["player.citations", "elapsedMonth"]
+  - text: ui.hindexMeter
+    side: right
+    updateTrigger:
+      variables: ["player.hindex", "elapsedMonth"]
   - text: ui.timeMeter
     side: right
     updateTrigger:

@@ -16,6 +16,47 @@ status:
       - target: player.experimentBoost
         type: Absolute
         amount: 0.3
+      - target: player.computeBoost
+        type: Absolute
+        amount: 4
+  # Temporary GPU credits while interning (you only have the company's compute
+  # during the internship, not forever).
+  - id: internCreditsBig
+    duration: 3
+    effects:
+    - attributeModifiers:
+      - target: player.computeBoost
+        type: Absolute
+        amount: 14
+  - id: internCreditsMed
+    duration: 3
+    effects:
+    - attributeModifiers:
+      - target: player.computeBoost
+        type: Absolute
+        amount: 8
+  # A cloud/GPU shortage temporarily cuts your capacity.
+  - id: gpuShortage
+    duration: 2
+    effects:
+    - attributeModifiers:
+      - target: player.computeBoost
+        type: Absolute
+        amount: -5
+  # A fellowship: lasting extra compute capacity + acceptance bump.
+  - id: fellowship
+    duration: Infinity
+    effects:
+    - attributeModifiers:
+      - target: player.computeBoost
+        type: Absolute
+        amount: 3
+      - target: player.paperAcceptanceBoost
+        type: Absolute
+        amount: 0.05
+  # You released code for your work (reproducibility => citations/reputation).
+  - id: codeReleased
+    duration: Infinity
   - id: cloudStorage
     duration: Infinity
   - id: interned

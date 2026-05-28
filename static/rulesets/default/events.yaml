@@ -6,27 +6,41 @@
   - id: UpdateVariableLimits
     updates:
       player.hope: [0, 100]
-      player.compute: [0, 80]
+      player.compute: [0, 99]
   - id: UpdateVariables
     updates:
       elapsedMonth: 0
       month: 1
       year: 1
       player.hope: 50
-      # GPU / compute budget (in arbitrary units); accumulates if unspent
-      player.compute: 5
+      # GPU compute is a MONTHLY CAPACITY (a rate), reset every month — you
+      # cannot bank unused compute. `computeBase` is your lab's allocation
+      # (set by your advisor); `compute` is what's left to spend this month.
+      player.computeBase: 6
+      player.compute: 6
       # total citations accumulated by your published & preprinted work
       player.citations: 0
       # reputation / impact stock; drives citation growth and acceptance odds
       player.pubWeight: 0
+      # subfield modifiers (set when you pick a research area)
+      player.scoopMod: 1
+      player.citeVelocity: 1
+      player.subfield: 0
+      # advisor/career signals
+      player.letterStrength: 1
+      player.serviceRep: 0
+      # derived display stats
+      player.paperCount: 0
+      player.hindex: 0
       # internship tracking (drives the final placement)
       player.internCount: 0
       player.researchIntern: 0
       player.bigTechIntern: 0
       # set to 1 when you decide (or are pushed) to graduate
       player.graduating: 0
-      # scratch variable used to compute the final placement
+      # scratch variables used to compute the final placement / report card
       player.finalScore: 0
+      player.finalPapers: 0
       player.readPapers: 0
       player.monthSkipped: 0
       player.exhaustionLevel: 0
@@ -70,6 +84,114 @@
       - id: DisplayMessage
         message: message.acceptedOffer
         confirm: message.excited
+      # --- Difficulty ---
+      - id: DisplayChoices
+        message: message.chooseDifficulty
+        choices:
+        - message: message.diffEasy
+          actions:
+          - id: UpdateVariable
+            variable: rule.papersRequired
+            value: 2
+        - message: message.diffNormal
+          actions:
+          - id: UpdateVariable
+            variable: rule.papersRequired
+            value: 3
+        - message: message.diffHard
+          actions:
+          - id: UpdateVariables
+            updates:
+              rule.papersRequired: 4
+              player.scoopMod: 1.3
+      # --- Advisor archetype ---
+      - id: DisplayChoices
+        message: message.chooseAdvisor
+        choices:
+        - message: message.advisorFamous
+          actions:
+          - id: DisplayMessage
+            message: message.advisorFamousPicked
+            confirm: message.excited
+          - id: UpdateVariables
+            updates:
+              player.computeBase: 11
+              advisor.fundingLevel: 1
+              player.letterStrength: 2
+        - message: message.advisorJunior
+          actions:
+          - id: DisplayMessage
+            message: message.advisorJuniorPicked
+            confirm: message.excited
+          - id: UpdateVariables
+            updates:
+              player.computeBase: 5
+              player.letterStrength: 1
+              player.hope: player.hope + 5
+        - message: message.advisorBalanced
+          actions:
+          - id: DisplayMessage
+            message: message.advisorBalancedPicked
+            confirm: message.ok
+          - id: UpdateVariables
+            updates:
+              player.computeBase: 7
+              player.letterStrength: 1.5
+      # --- Research subfield ---
+      - id: DisplayChoices
+        message: message.chooseSubfield
+        choices:
+        - message: message.subLLM
+          actions:
+          - id: DisplayMessage
+            message: message.subLLMPicked
+            confirm: message.excited
+          - id: UpdateVariables
+            updates:
+              player.subfield: 1
+              player.scoopMod: player.scoopMod * 1.4
+              player.citeVelocity: 1.5
+              player.computeBase: player.computeBase - 1
+        - message: message.subCV
+          actions:
+          - id: DisplayMessage
+            message: message.subCVPicked
+            confirm: message.cool
+          - id: UpdateVariables
+            updates:
+              player.subfield: 2
+              player.scoopMod: player.scoopMod * 1.2
+              player.citeVelocity: 1.2
+        - message: message.subRL
+          actions:
+          - id: DisplayMessage
+            message: message.subRLPicked
+            confirm: message.ok
+          - id: UpdateVariable
+            variable: player.subfield
+            value: 3
+        - message: message.subTheory
+          actions:
+          - id: DisplayMessage
+            message: message.subTheoryPicked
+            confirm: message.ok
+          - id: UpdateVariables
+            updates:
+              player.subfield: 4
+              player.scoopMod: player.scoopMod * 0.5
+              player.citeVelocity: 0.6
+              player.computeBase: player.computeBase + 3
+        - message: message.subSystems
+          actions:
+          - id: DisplayMessage
+            message: message.subSystemsPicked
+            confirm: message.ok
+          - id: UpdateVariables
+            updates:
+              player.subfield: 5
+              player.scoopMod: player.scoopMod * 0.9
+              player.citeVelocity: 0.9
+              player.computeBase: player.computeBase + 1
       - id: DisplayMessage
         message: message.courseworkNotice
         confirm: message.ok
@@ -88,7 +210,12 @@
     updates:
       player.hope: player.hope + getAttributeValue('player.hopeBoost')
       player.monthSkipped: 0
-      player.compute: clip(player.compute + 3 + advisor.fundingLevel + hasStatus('upgradedEquipment') * 2, 0, 80)
+      # GPU capacity RESETS every month (use-it-or-lose-it): lab allocation +
+      # funding + hardware/credits/fellowship (attribute) + seniority.
+      player.compute: clip(player.computeBase + advisor.fundingLevel + getAttributeValue('player.computeBoost') + floor(year / 2), 0, 99)
+      # derived stats for the meters / report card
+      player.paperCount: itemCount('paper')
+      player.hindex: min(itemCount('paper'), floor(player.citations / 12))
 - id: LostAllHope
   trigger: MonthBegin
   conditions:
@@ -121,7 +248,7 @@
   actions:
   - id: UpdateVariable
     variable: player.citations
-    value: player.citations + round(player.pubWeight * (1 + random() * 2))
+    value: player.citations + round(player.pubWeight * player.citeVelocity * (1 + random() * 2))
 - id: WellCitedMilestone
   trigger: MonthBegin
   once: true
@@ -246,9 +373,6 @@
   - id: SetStatus
     statusId: brokenEquipment
     on: false
-  - id: UpdateVariable
-    variable: player.compute
-    value: clip(player.compute + 4, 0, 80)
 - id: CloudStorage
   trigger: YearBegin
   once: true
@@ -373,7 +497,6 @@
         updates:
           advisor.fundingLevel: advisor.fundingLevel + global.fundingChange
           player.hope: player.hope + 5
-          player.compute: clip(player.compute + 5, 0, 80)
     - condition: global.fundingChange < 0
       actions:
       - id: DisplayMessage
@@ -472,6 +595,22 @@
       - id: GiveItem
         itemId: idea
         amount: 1
+# TA / funding duty: eats a month of research time (heavier in early years).
+- id: TADuty
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: year <= 4 && player.monthSkipped === 0 && itemCount('paper') < rule.papersRequired
+  probability: 0.12
+  actions:
+  - id: UpdateVariable
+    variable: player.monthSkipped
+    value: 1
+  - id: DisplayRandomMessage
+    messages:
+    - message.taDuty1
+    - message.taDuty2
+    confirm: message.ok
 # ===========================================================================
 # Main monthly action menu
 # Pipeline: read -> idea -> (compute) experiment -> prelim
@@ -777,9 +916,11 @@
             - id: GiveItem
               itemId: idea
               amount: 1
+            - id: SetStatus
+              statusId: internCreditsBig
+              on: true
             - id: UpdateVariables
               updates:
-                player.compute: clip(player.compute + 12, 0, 80)
                 player.hope: player.hope + 10
                 player.pubWeight: player.pubWeight + 2
                 player.citations: player.citations + randi(10) + 5
@@ -798,9 +939,11 @@
             - id: GiveItem
               itemId: idea
               amount: 1
+            - id: SetStatus
+              statusId: internCreditsMed
+              on: true
             - id: UpdateVariables
               updates:
-                player.compute: clip(player.compute + 10, 0, 80)
                 player.hope: player.hope + 8
                 player.pubWeight: player.pubWeight + 1
                 player.citations: player.citations + randi(6) + 2
@@ -816,9 +959,11 @@
               - message.internProduct1
               - message.internProduct2
               confirm: message.cool
+            - id: SetStatus
+              statusId: internCreditsMed
+              on: true
             - id: UpdateVariables
               updates:
-                player.compute: clip(player.compute + 6, 0, 80)
                 player.hope: player.hope + 11
                 player.internCount: player.internCount + 1
                 player.bigTechIntern: 1
@@ -834,9 +979,11 @@
             - id: GiveItem
               itemId: idea
               amount: 1
+            - id: SetStatus
+              statusId: internCreditsBig
+              on: true
             - id: UpdateVariables
               updates:
-                player.compute: clip(player.compute + 16, 0, 80)
                 player.hope: player.hope + 6
                 player.pubWeight: player.pubWeight + 1
                 player.internCount: player.internCount + 1
@@ -854,7 +1001,6 @@
               amount: 2
             - id: UpdateVariables
               updates:
-                player.compute: clip(player.compute + 4, 0, 80)
                 player.hope: player.hope + 8
                 player.pubWeight: player.pubWeight + 1
                 player.citations: player.citations + randi(4) + 1
@@ -1205,6 +1351,21 @@
         updates:
           player.exhaustionLevel: player.exhaustionLevel + 1
           player.hope: player.hope - 2
+    - message: message.rebuttalExperiment
+      requirement: player.compute >= 4
+      actions:
+      - id: DisplayMessage
+        message: message.rebuttalExperimentDone
+        confirm: message.hope
+      - id: SetStatus
+        statusId: strongRebuttal
+        on: true
+      - id: UpdateVariables
+        updates:
+          player.compute: player.compute - 4
+          player.pubWeight: player.pubWeight + 1
+          player.citations: player.citations + randi(4) + 1
+          player.exhaustionLevel: player.exhaustionLevel + 1
     - message: message.skipRebuttal
       actions:
       - id: DisplayMessage
@@ -1218,7 +1379,7 @@
   conditions:
   - id: Expression
     expression: itemCount('idea') >= 1
-  probability: max(0.02, 0.18 - hasStatus('preprinted') * 0.07 - min(player.pubWeight * 0.01, 0.07))
+  probability: max(0.02, (0.18 - hasStatus('preprinted') * 0.07 - min(player.pubWeight * 0.01, 0.07)) * player.scoopMod)
   actions:
   - id: DisplayMessage
     message: message.ideaDoneByOthers
@@ -1234,7 +1395,7 @@
   conditions:
   - id: Expression
     expression: itemCount('preliminaryResult') >= 1
-  probability: max(0.02, 0.07 - hasStatus('preprinted') * 0.03)
+  probability: max(0.02, (0.07 - hasStatus('preprinted') * 0.03) * player.scoopMod)
   actions:
   - id: DisplayMessage
     message: message.prelimDoneByOthers
@@ -1488,9 +1649,11 @@
           - id: GiveItem
             itemId: idea
             amount: 1
+          - id: SetStatus
+            statusId: internCreditsBig
+            on: true
           - id: UpdateVariables
             updates:
-              player.compute: clip(player.compute + 14, 0, 80)
               player.hope: player.hope + 10
               player.pubWeight: player.pubWeight + 2
               player.citations: player.citations + randi(10) + 5
@@ -1509,9 +1672,11 @@
           - id: GiveItem
             itemId: idea
             amount: 1
+          - id: SetStatus
+            statusId: internCreditsMed
+            on: true
           - id: UpdateVariables
             updates:
-              player.compute: clip(player.compute + 10, 0, 80)
               player.hope: player.hope + 8
               player.pubWeight: player.pubWeight + 1
               player.citations: player.citations + randi(6) + 2
@@ -1570,6 +1735,179 @@
     variable: player.hope
     value: player.hope + 5
 # ===========================================================================
+# Academic service, reproducibility, fellowships, and AI-world drama
+# ===========================================================================
+- id: ReviewRequest
+  trigger: MonthBegin
+  probability: 0.10
+  conditions:
+  - id: Expression
+    expression: (itemCount('paper') >= 1 || hasStatus('preprinted')) && itemCount('paper') < rule.papersRequired
+  actions:
+  - id: DisplayChoices
+    message: message.reviewRequest
+    choices:
+    - message: message.acceptReview
+      actions:
+      - id: DisplayMessage
+        message: message.acceptedReview
+        confirm: message.gotit
+      - id: UpdateVariables
+        updates:
+          player.serviceRep: player.serviceRep + 1
+          player.exhaustionLevel: player.exhaustionLevel + 1
+          advisor.happiness: advisor.happiness + 1
+    - message: message.declineReview
+      actions:
+      - id: DisplayMessage
+        message: message.declinedReview
+        confirm: message.ok
+- id: CodeRelease
+  trigger: MonthBegin
+  probability: 0.4
+  conditions:
+  - id: Expression
+    expression: itemCount('paper') >= 1 && !hasStatus('codeReleased')
+  actions:
+  - id: DisplayChoices
+    message: message.codeReleasePrompt
+    choices:
+    - message: message.releaseCode
+      actions:
+      - id: DisplayMessage
+        message: message.codeReleased
+        confirm: message.great
+      - id: SetStatus
+        statusId: codeReleased
+        on: true
+      - id: UpdateVariables
+        updates:
+          player.pubWeight: player.pubWeight + 1
+          player.citations: player.citations + randi(8) + 3
+          player.hope: player.hope + 3
+    - message: message.skipCodeRelease
+      actions:
+      - id: DisplayMessage
+        message: message.skippedCodeRelease
+        confirm: message.ok
+- id: ReproducibilityCallout
+  trigger: MonthBegin
+  once: true
+  probability: 0.5
+  conditions:
+  - id: Expression
+    expression: itemCount('paper') >= 2 && !hasStatus('codeReleased') && year >= 4
+  actions:
+  - id: DisplayMessage
+    message: message.reproCallout
+    confirm: message.sucks
+  - id: UpdateVariable
+    variable: player.hope
+    value: player.hope - 5
+- id: Fellowship
+  trigger: YearBegin
+  once: true
+  probability: 0.5
+  conditions:
+  - id: Expression
+    expression: year >= 2 && year <= 4 && (player.pubWeight >= 1 || player.citations >= 30)
+  actions:
+  - id: CoinFlip
+    probability: clip(0.3 + player.pubWeight * 0.05 + player.citations / 400, 0.1, 0.85)
+    success:
+    - id: DisplayRandomMessage
+      messages:
+      - message.fellowshipWon1
+      - message.fellowshipWon2
+      confirm: message.party
+    - id: SetStatus
+      statusId: fellowship
+      on: true
+    - id: UpdateVariables
+      updates:
+        advisor.fundingLevel: advisor.fundingLevel + 1
+        player.hope: player.hope + 8
+        player.letterStrength: player.letterStrength + 0.5
+    fail:
+    - id: DisplayMessage
+      message: message.fellowshipLost
+      confirm: message.unfortunate
+# A new foundation model drops and obsoletes your project -> forced pivot.
+- id: Obsolescence
+  trigger: MonthBegin
+  probability: 0.045
+  conditions:
+  - id: Expression
+    expression: year >= 2 && (itemCount('majorResult') > 0 || itemCount('paperDraft') > 0) && itemCount('paper') < rule.papersRequired
+  actions:
+  - id: DisplayRandomMessage
+    messages:
+    - message.obsolescence1
+    - message.obsolescence2
+    confirm: message.sucks
+  - id: Switch
+    branches:
+    - condition: itemCount('paperDraft') > 0
+      actions:
+      - id: UpdateItemAmounts
+        updates:
+          paperDraft: -1
+    - condition: 1
+      actions:
+      - id: UpdateItemAmounts
+        updates:
+          majorResult: -1
+  - id: GiveItem
+    itemId: idea
+    amount: 1
+  - id: UpdateVariable
+    variable: player.hope
+    value: player.hope - 8
+- id: FamousCitation
+  trigger: MonthBegin
+  probability: 0.06
+  conditions:
+  - id: Expression
+    expression: itemCount('paper') >= 1
+  actions:
+  - id: DisplayRandomMessage
+    messages:
+    - message.famousCitation1
+    - message.famousCitation2
+    confirm: message.party
+  - id: UpdateVariables
+    updates:
+      player.citations: player.citations + randi(12) + 5
+      player.hope: player.hope + 4
+- id: GpuShortageEvent
+  trigger: MonthBegin
+  once: true
+  probability: 0.3
+  conditions:
+  - id: Expression
+    expression: year >= 2 && !hasStatus('gpuShortage')
+  actions:
+  - id: DisplayMessage
+    message: message.gpuShortageNews
+    confirm: message.sucks
+  - id: SetStatus
+    statusId: gpuShortage
+    on: true
+- id: DatasetScandal
+  trigger: MonthBegin
+  once: true
+  probability: 0.25
+  conditions:
+  - id: Expression
+    expression: year >= 3 && itemCount('paper') >= 1
+  actions:
+  - id: DisplayMessage
+    message: message.datasetScandal
+    confirm: message.oops
+  - id: UpdateVariable
+    variable: player.hope
+    value: player.hope - 3
+# ===========================================================================
 # Graduation & final placement
 #   - You may graduate any time once you meet the bar (the thesis action).
 #   - From year 7 on, if you meet the bar, your advisor pushes you out.
@@ -1595,9 +1933,15 @@
   - id: Expression
     expression: player.graduating === 1
   actions:
+  - id: UpdateVariable
+    variable: player.finalPapers
+    value: itemCount('paper')
   - id: DisplayMessage
     message: message.graduated
     confirm: message.party
+  - id: DisplayMessage
+    message: message.reportCard
+    confirm: message.great
   - id: DisplayChoices
     message: message.chooseCareer
     choices:
@@ -1605,7 +1949,7 @@
       actions:
       - id: UpdateVariable
         variable: player.finalScore
-        value: itemCount('paper') * 12 + player.citations / 8 + player.researchIntern * 10 + randi(20)
+        value: itemCount('paper') * 12 + player.citations / 8 + player.researchIntern * 10 + player.letterStrength * 6 + player.serviceRep * 2 + randi(20)
       - id: Switch
         branches:
         - condition: player.finalScore >= 75
@@ -1638,7 +1982,7 @@
       actions:
       - id: UpdateVariable
         variable: player.finalScore
-        value: itemCount('paper') * 7 + player.citations / 12 + player.bigTechIntern * 12 + player.researchIntern * 5 + randi(20)
+        value: itemCount('paper') * 7 + player.citations / 12 + player.bigTechIntern * 12 + player.researchIntern * 5 + player.letterStrength * 4 + randi(20)
       - id: Switch
         branches:
         - condition: player.finalScore >= 65

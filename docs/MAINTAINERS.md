@@ -149,9 +149,13 @@ Win condition: `itemCount('paper') >= rule.papersRequired` (default 3), then
 | Variable | Meaning | Notes |
 |----------|---------|-------|
 | `player.hope` | morale, 0–100 | 0 ⇒ drop out (`LostAllHope`) |
-| `player.compute` | GPU budget, 0–80 | **+3/mo** + funding + H100 node; spent by experiments. Accumulates if unspent. |
-| `player.citations` | total citations | grow monthly ∝ `pubWeight`; milestones at 50 / 200 |
-| `player.pubWeight` | reputation/impact stock | from papers, preprints, internships, viral models; raises acceptance & cuts scooping |
+| `player.compute` | GPU budget **for this month**, 0–99 | **RESET every month** (use-it-or-lose-it, NOT banked) to `computeBase + funding + computeBoost(attr) + floor(year/2)`. Spent by experiments. |
+| `player.computeBase` | your lab's monthly GPU allocation | set by the advisor pick + subfield modifier |
+| `player.citations` | total citations | grow monthly ∝ `pubWeight × citeVelocity`; milestones at 50 / 200 |
+| `player.pubWeight` | reputation/impact stock | from papers, preprints, internships, code release, viral models; raises acceptance & cuts scooping |
+| `player.scoopMod` / `player.citeVelocity` | subfield modifiers | scoop rate × `scoopMod`; citation growth × `citeVelocity` |
+| `player.letterStrength` / `player.serviceRep` | placement signals | advisor pick + fellowships / reviewing; feed the final placement |
+| `player.hindex` / `player.paperCount` | derived display stats | recomputed each month in `CommonVariableUpdates` |
 | `player.internCount` / `researchIntern` / `bigTechIntern` | internship record | feed the final placement score |
 | `player.graduating` | 0/1 | set by thesis action or forced graduation; `Graduation` event reads it |
 | `player.finalScore` | scratch | computed once per career choice to pick the placement tier |
@@ -159,10 +163,22 @@ Win condition: `itemCount('paper') >= rule.papersRequired` (default 3), then
 | `advisor.happiness` | advisor mood | <0 ⇒ `unhappyAdvisor` debuff |
 | `rule.papersRequired` / `rule.figuresRequired` | tunables | default 3 / 3 |
 
-### Three systems we added on top of the original
-1. **Compute** (`player.compute`): regenerated in `CommonVariableUpdates`, spent
-   by the menu research actions, gates the large-model path. Shown in the
-   top-left stats meter.
+### Game setup (one-time, in `TheBeginning`)
+After accepting the offer the player picks **difficulty** (sets
+`rule.papersRequired` + scoop), an **advisor archetype** (famous/junior/balanced
+→ `computeBase`, funding, `letterStrength`), and a **subfield** (LLM/CV/RL/
+theory/systems → `scoopMod`, `citeVelocity`, `computeBase` tweak). These are the
+biggest source of run-to-run variety. Keep `subfield` numeric (1–5).
+
+### Core systems
+1. **Compute** (`player.compute`): a **monthly capacity that resets** in
+   `CommonVariableUpdates` (GPU is a rate, not a savings account — you cannot
+   bank unused compute). Capacity = `computeBase + funding + computeBoost
+   (attribute, from `upgradedEquipment`/`internCredits*`/`fellowship`/
+   `gpuShortage`) + floor(year/2)`. Spent by the menu research actions; gates
+   the large-model path. Top-left meter. Internships grant *temporary* capacity
+   via the `internCredits*` statuses (you only have the company's GPUs for the
+   summer), not a permanent dump.
 2. **Citations** (`player.citations` + `player.pubWeight`): `CitationGrowth`
    accrues monthly; `WellCitedMilestone`/`InfluentialMilestone` grant acceptance
    buffs; reputation reduces scoop probability in `IdeaDoneByOthers` /
@@ -180,6 +196,15 @@ Win condition: `itemCount('paper') >= rule.papersRequired` (default 3), then
    Each venue has its own `submitted<Venue>` item. Submission is gated to one
    in-flight paper per venue (`itemCount('submitted<Venue>') === 0`) so a single
    `CoinFlip` resolves it cleanly.
+
+### Service, awards & AI-world drama (event pack)
+`ReviewRequest` (service → `serviceRep`), `CodeRelease`/`ReproducibilityCallout`
+(`codeReleased` status → citations / avoid a callout), `Fellowship` (→
+`fellowship` status: compute + acceptance + letter), `Obsolescence` (a new
+foundation model voids a `majorResult`/`paperDraft`, forces a pivot),
+`FamousCitation`, `GpuShortageEvent` (→ `gpuShortage` status cuts capacity),
+`DatasetScandal`, and `TADuty` (skips a month early-on; sits before the menu).
+`RebuttalPeriod` has a compute-spending "extra experiment" option.
 
 ### Internships (`RecruiterReachout` event + `applyInternship` menu action)
 - **Apply yourself**: a monthly action (costs the month). Offer chance scales

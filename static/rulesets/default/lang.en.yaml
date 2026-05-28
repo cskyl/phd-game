@@ -19,6 +19,7 @@ ui.seedContent: "The seed for the current timeline is **{{@seed}}**. Shareable l
 ui.hopeMeter: Hope {{player.hope}}/100
 ui.computeMeter: GPU {{player.compute}}
 ui.citationMeter: Citations {{player.citations}}
+ui.hindexMeter: h-index {{player.hindex}}
 ui.timeMeter: Year {{year}} Month {{month}}
 
 # ---------------------------------------------------------------------------
@@ -335,3 +336,76 @@ message.unfortunate: That's unfortunate.
 message.restart: Rewind time and try again.
 message.restartNewTimeline: Jump to a different timeline and start over.
 message.hopeAccepted: Hope it lands this time.
+
+# ---------------------------------------------------------------------------
+# New statuses
+# ---------------------------------------------------------------------------
+status.internCreditsBig: Internship GPU Credits
+status.internCreditsBig.description: Massive cloud/GPU credits from your internship. **Big monthly compute boost** — but only for a few months.
+status.internCreditsMed: Internship GPU Credits
+status.internCreditsMed.description: Extra cloud/GPU credits from your internship. **Monthly compute boost** for a few months.
+status.gpuShortage: GPU Shortage
+status.gpuShortage.description: A cluster crunch / GPU price spike has **cut your monthly compute** for a while.
+status.fellowship: Fellowship
+status.fellowship.description: You hold a research fellowship. **Extra monthly compute** and a small acceptance bump.
+status.codeReleased: Code Released
+status.codeReleased.description: You open-sourced your work — better reproducibility and a steady stream of citations.
+
+# ---------------------------------------------------------------------------
+# Game setup: difficulty / advisor / subfield
+# ---------------------------------------------------------------------------
+message.chooseDifficulty: How hard do you want your PhD to be?
+message.diffEasy: "Chill (2 papers to graduate)."
+message.diffNormal: "Normal (3 papers)."
+message.diffHard: "Brutal (4 papers, more scooping)."
+message.chooseAdvisor: Which advisor will you join?
+message.advisorFamous: "A **famous, compute-rich PI** (big lab, hands-off)."
+message.advisorFamousPicked: You join a star professor's massive lab — H100s for days and a powerful recommendation letter, but you're one of 20 students and mostly on your own.
+message.advisorJunior: "A **hungry junior PI** (small lab, hands-on)."
+message.advisorJuniorPicked: You join a new assistant professor desperate for hits. Little compute, but they're in the trenches with you daily and you feel energized.
+message.advisorBalanced: "A **solid mid-career PI** (balanced)."
+message.advisorBalancedPicked: You join a well-established associate professor. Reasonable compute, reasonable expectations, a name with some weight.
+message.chooseSubfield: What's your research area?
+message.subLLM: "**LLMs / NLP** — hottest, compute-hungry, cutthroat."
+message.subLLMPicked: You go into large language models. Fast-moving and high-citation, but compute-hungry and you'll get scooped constantly.
+message.subCV: "**Computer Vision** — big, competitive."
+message.subCVPicked: You go into computer vision. A huge, competitive field with steady citations and a clear venue in CVPR.
+message.subRL: "**Reinforcement Learning** — finicky but cool."
+message.subRLPicked: You go into reinforcement learning. Results are noisy and seeds matter, but the demos are spectacular.
+message.subTheory: "**ML Theory** — cheap compute, slow burn."
+message.subTheoryPicked: You go into learning theory. Barely any compute needed and almost nobody scoops you — but citations accrue slowly.
+message.subSystems: "**ML Systems** — compute-rich, practical."
+message.subSystemsPicked: You go into ML systems & efficiency. Compute-rich, practical, and your work tends to actually get used.
+
+# ---------------------------------------------------------------------------
+# Academic service / reproducibility / fellowships / drama
+# ---------------------------------------------------------------------------
+message.reviewRequest: An Area Chair invites you to **review** a batch of papers for a top conference. Take it on?
+message.acceptReview: Accept — do your service.
+message.acceptedReview: You wrote thoughtful reviews (and discovered three papers doing things you should cite). Good for your standing in the community.
+message.declineReview: Decline — too busy.
+message.declinedReview: You declined. The AC will remember, but your time is your own this month.
+message.codeReleasePrompt: Your accepted paper is out. Clean up the repo and **release the code**?
+message.releaseCode: Release the code & checkpoints.
+message.codeReleased: You open-sourced everything. People can reproduce your results — and the citations (and GitHub stars) start flowing.
+message.skipCodeRelease: "\"Code coming soon.\""
+message.skippedCodeRelease: You left the repo as a dusty "coming soon" link. (We both know it isn't.)
+message.reproCallout: "A popular blog post calls out your lab: \"We tried to reproduce this paper and couldn't — no code, missing details.\" Ouch."
+message.fellowshipWon1: You won a **research fellowship** (think NSF GRFP / Goggle PhD Fellowship)! Funding, compute, and a serious line on your CV.
+message.fellowshipWon2: Your **fellowship** application (NWidia / OpenAEye Fellowship) came through — money, GPUs, and prestige.
+message.fellowshipLost: Your fellowship application didn't make it this year. The feedback was "strong but not funded."
+message.obsolescence1: "Overnight, a frontier lab drops **GPT-6** — and it does your task zero-shot, better than your method. Your current project is suddenly obsolete. Time to pivot."
+message.obsolescence2: "A new open model (**Llama-5**) lands and saturates your benchmark. Reviewers will ask why anyone needs your approach now. You have to pivot."
+message.famousCitation1: A **famous researcher** built on your paper and praised it on X. Your citation count jumps.
+message.famousCitation2: Your work got cited in a **GPT-7 technical report**. Surreal — and great for your numbers.
+message.gpuShortageNews: "GPU SHORTAGE: a global compute crunch hits. Your cluster queue times explode and your monthly compute drops for a while."
+message.datasetScandal: "A widely-used benchmark you built on is found to be **contaminated / mislabeled**. Awkward — but your other results still stand."
+message.rebuttalExperiment: Run an extra experiment for the rebuttal (−4 GPU).
+message.rebuttalExperimentDone: You burned a chunk of compute on exactly the experiment Reviewer 2 demanded, and added it to the rebuttal. That's hard to argue with — acceptance odds **boosted**.
+message.taDuty1: You spent the month **TA-ing** a 200-person course — grading, office hours, and a mountain of regrade requests. No time for research.
+message.taDuty2: "Funding gap: you had to **TA** this month to cover your stipend. Research took the back seat."
+
+# ---------------------------------------------------------------------------
+# Report card (shown at graduation)
+# ---------------------------------------------------------------------------
+message.reportCard: "📋 **Your PhD by the numbers:** {{player.finalPapers}} top-tier papers · {{player.citations}} citations · h-index {{player.hindex}} · {{player.internCount}} internship(s) · {{year}} years in. Now for the job market…"

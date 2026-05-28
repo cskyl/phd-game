@@ -19,6 +19,7 @@ ui.seedContent: "当前时间线的随机种子是 **{{@seed}}**。可分享链�
 ui.hopeMeter: 希望 {{player.hope}}/100
 ui.computeMeter: 算力 {{player.compute}}
 ui.citationMeter: 引用 {{player.citations}}
+ui.hindexMeter: h指数 {{player.hindex}}
 ui.timeMeter: 第 {{year}} 年 第 {{month}} 月
 
 # ---------------------------------------------------------------------------
@@ -335,3 +336,76 @@ message.unfortunate: 真不走运。
 message.restart: 倒带重来。
 message.restartNewTimeline: 跳到另一条时间线重新开始。
 message.hopeAccepted: 希望这次能中。
+
+# ---------------------------------------------------------------------------
+# 新状态
+# ---------------------------------------------------------------------------
+status.internCreditsBig: 实习算力额度
+status.internCreditsBig.description: 实习带来的海量云/GPU 额度。**每月算力大幅提升**——但只持续几个月。
+status.internCreditsMed: 实习算力额度
+status.internCreditsMed.description: 实习带来的额外云/GPU 额度。**每月算力提升**，持续几个月。
+status.gpuShortage: 显卡荒
+status.gpuShortage.description: 集群挤兑/显卡涨价，**每月算力被砍** 一阵子。
+status.fellowship: 奖学金 / Fellowship
+status.fellowship.description: 你拿到了研究 fellowship。**每月额外算力**，外加一点录用加成。
+status.codeReleased: 已开源代码
+status.codeReleased.description: 你把工作开源了——可复现性更好，引用也源源不断。
+
+# ---------------------------------------------------------------------------
+# 开局设置：难度 / 导师 / 方向
+# ---------------------------------------------------------------------------
+message.chooseDifficulty: 你希望你的博士有多难？
+message.diffEasy: "佛系（2 篇论文毕业）。"
+message.diffNormal: "正常（3 篇）。"
+message.diffHard: "地狱（4 篇，更容易被抢发）。"
+message.chooseAdvisor: 你要加入哪位导师？
+message.advisorFamous: "**有名、算力多的大牛**（大组，放养）。"
+message.advisorFamousPicked: 你加入了一位明星教授的大组——H100 管够、推荐信很硬，但你是二十个学生之一，基本靠自己。
+message.advisorJunior: "**求成果的青椒**（小组，亲自带）。"
+message.advisorJuniorPicked: 你加入了一位急需成果的新晋助理教授。算力不多，但他天天和你一起冲，你干劲十足。
+message.advisorBalanced: "**稳健的中年 PI**（均衡）。"
+message.advisorBalancedPicked: 你加入了一位资历稳固的副教授。算力适中、期望适中、名字也有点分量。
+message.chooseSubfield: 你的研究方向是？
+message.subLLM: "**大模型 / NLP**——最热、最吃算力、最卷。"
+message.subLLMPicked: 你做大语言模型。节奏飞快、引用高，但极其吃算力，而且会被反复抢发。
+message.subCV: "**计算机视觉**——大领域、竞争激烈。"
+message.subCVPicked: 你做计算机视觉。一个庞大而竞争激烈的领域，引用稳定，CVPR 是明确的主场。
+message.subRL: "**强化学习**——玄学但很酷。"
+message.subRLPicked: 你做强化学习。结果噪声大、随机种子很关键，但 demo 极其炫酷。
+message.subTheory: "**机器学习理论**——几乎不吃算力、细水长流。"
+message.subTheoryPicked: 你做学习理论。几乎不需要算力、也几乎没人抢发你——但引用涨得很慢。
+message.subSystems: "**ML 系统 / 效率**——算力充足、实用。"
+message.subSystemsPicked: 你做 ML 系统与效率。算力充足、偏实用，你的工作往往真的会被人用上。
+
+# ---------------------------------------------------------------------------
+# 学术服务 / 可复现 / 奖学金 / 圈内瓜
+# ---------------------------------------------------------------------------
+message.reviewRequest: 一位领域主席（AC）邀请你给某顶会 **审一批稿**。接吗？
+message.acceptReview: 接——尽一份学术服务。
+message.acceptedReview: 你认真写了审稿意见（顺便发现三篇你该引用的论文）。对你在圈内的口碑有好处。
+message.declineReview: 拒——太忙了。
+message.declinedReview: 你拒绝了。AC 会记着，但这个月的时间是你自己的。
+message.codeReleasePrompt: 你录用的论文出来了。整理一下仓库、**开源代码** 吗？
+message.releaseCode: 开源代码和 checkpoint。
+message.codeReleased: 你把一切都开源了。别人能复现你的结果——引用（和 GitHub star）开始滚滚而来。
+message.skipCodeRelease: "「代码即将放出」。"
+message.skippedCodeRelease: 你在仓库里挂了个落灰的「coming soon」链接。（你我都知道它不会来。）
+message.reproCallout: "一篇热门博客点名你的实验室：「我们试着复现这篇论文，没成功——没代码、细节也缺。」难绷。"
+message.fellowshipWon1: 你拿到了 **研究奖学金 / fellowship**（类似 NSF GRFP / 狗家 PhD Fellowship）！经费、算力，外加简历上硬气的一行。
+message.fellowshipWon2: 你的 **fellowship** 申请（NWidia / OpenAEye Fellowship）过了——钱、卡、声望全都有了。
+message.fellowshipLost: 你今年的 fellowship 申请没中。评语是「很强，但没拿到资助」。
+message.obsolescence1: "一夜之间，某前沿实验室放出了 **GPT-6**——它零样本就把你的任务做了，还比你的方法更好。你当前的项目瞬间过时。该 pivot 了。"
+message.obsolescence2: "一个新的开源模型（**Llama-5**）出现并刷爆了你的 benchmark。审稿人会问凭什么还需要你的方法。你不得不 pivot。"
+message.famousCitation1: 一位 **知名研究者** 在你的论文基础上做了工作，还在 X 上夸了你。你的引用数蹭蹭涨。
+message.famousCitation2: 你的工作被 **GPT-7 技术报告** 引用了。魔幻——但对你的数据很有帮助。
+message.gpuShortageNews: "显卡荒：全球算力挤兑来袭。你的集群排队时间爆炸，每月算力下降一阵子。"
+message.datasetScandal: "你工作所基于的一个常用 benchmark 被发现 **数据污染 / 标注错误**。有点尴尬——但你其他结果仍然站得住。"
+message.rebuttalExperiment: 为 rebuttal 补一个实验（−4 算力）。
+message.rebuttalExperimentDone: 你砸了一笔算力，正好补上审稿人二号点名要的实验，并写进了 rebuttal。这下很难再被反驳——录用概率 **提升**。
+message.taDuty1: 这个月你在给一门 200 人的课 **当助教**——批作业、答疑，还有堆成山的改分申请。没空做研究。
+message.taDuty2: 经费缺口：这个月你只能去 **当助教** 来挣补助。研究只好往后稍稍。
+
+# ---------------------------------------------------------------------------
+# 成绩单（毕业时显示）
+# ---------------------------------------------------------------------------
+message.reportCard: "📋 **你的博士数据一览：** {{player.finalPapers}} 篇顶会论文 · {{player.citations}} 引用 · h 指数 {{player.hindex}} · {{player.internCount}} 段实习 · 第 {{year}} 年。接下来，看看就业市场……"

@@ -6,3 +6,7 @@ attributes:
   baseValue: 0
 - id: player.paperAcceptanceBoost
   baseValue: 0
+# Temporary monthly GPU-capacity bonuses (from hardware, internship credits,
+# fellowships, or shortages). Added into the monthly compute reset.
+- id: player.computeBoost
+  baseValue: 0
