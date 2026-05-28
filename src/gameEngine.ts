@@ -302,7 +302,7 @@ export class GameActionProxy implements GuiActionProxy {
         return this._guiGame.displayMessage(message, confirm, icon, fx);
     }
 
-    displayChoices(message: string, choices: Array<[string, number]>, icon?: string): Promise<number> {
+    displayChoices(message: string, choices: Array<[string, number, boolean?]>, icon?: string): Promise<number> {
         if (!this._guiGame) throw new Error('No attached GUI.');
         return this._guiGame.displayChoices(message, choices, icon);
     }

@@ -98,7 +98,7 @@ export class GuiMessageWindow extends GuiBase<HTMLDivElement> {
         });
     }
 
-    async displayChoices(message: string, choices: Array<[string, number]>, icon?: string): Promise<number> {
+    async displayChoices(message: string, choices: Array<[string, number, boolean?]>, icon?: string): Promise<number> {
         if (this._typewriterSpeed > 0) {
             await this.typewriteMessage(message, icon);
         } else {
@@ -108,17 +108,26 @@ export class GuiMessageWindow extends GuiBase<HTMLDivElement> {
             let choiceButtons : HTMLAnchorElement[] = [];
             for (let i = 0;i < choices.length;i++) {
                 let btn = document.createElement('a');
-                let [choiceMessage, choiceId] = choices[i];
-                btn.className = 'btn';
-                // Allow styled text in the buttons.
-                btn.innerHTML = this._textEngine.localizeAndRender(choiceMessage);
+                let [choiceMessage, choiceId, disabled] = choices[i];
+                btn.className = disabled ? 'btn disabled' : 'btn';
+                // Allow styled text in the buttons. Append a localized suffix
+                // (e.g. "(GPU low)") for soft-disabled choices so the player
+                // sees that the option exists but isn't currently affordable.
+                let label = this._textEngine.localizeAndRender(choiceMessage);
+                if (disabled) {
+                    const suffix = this._textEngine.localizeAndRender('ui.disabledLabel');
+                    label += ' ' + suffix;
+                }
+                btn.innerHTML = label;
                 btn.href = 'javascript: void(0);';
                 btn.setAttribute('data-choice-number', choiceId.toString());
-                btn.onclick = () => {
-                    this._messageContainer.textContent = '';
-                    for (btn of choiceButtons) btn.remove();
-                    resolve(choiceId);
-                };
+                if (!disabled) {
+                    btn.onclick = () => {
+                        this._messageContainer.textContent = '';
+                        for (btn of choiceButtons) btn.remove();
+                        resolve(choiceId);
+                    };
+                }
                 choiceButtons.push(btn);
                 this._choicesContainer.appendChild(btn);
             }

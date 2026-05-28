@@ -21,7 +21,7 @@ export interface GuiGame {
 
     displayMessage(message: string, confirm: string, icon?: string, fx?: string): Promise<void>;
 
-    displayChoices(message: string, choices: Array<[string, number]>, icon?: string): Promise<number>;
+    displayChoices(message: string, choices: Array<[string, number, boolean?]>, icon?: string): Promise<number>;
 
 }
 
@@ -113,7 +113,7 @@ export class GuiGameWindow extends GuiBase<HTMLElement> implements GuiGame {
         return this._messageWindow.displayMessage(message, confirm, icon);
     }
 
-    displayChoices(message: string, choices: Array<[string, number]>, icon?: string): Promise<number> {
+    displayChoices(message: string, choices: Array<[string, number, boolean?]>, icon?: string): Promise<number> {
         return this._messageWindow.displayChoices(message, choices, icon);
     }
 

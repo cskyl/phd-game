@@ -801,7 +801,8 @@
     # spotlight/oral and citations. Sets player.pendingQuality, read by
     # PaperFate at acceptance time.
     - message: message.developIncremental
-      requirement: itemCount('idea') > 0 && player.compute >= 2 && itemCount('paper') < rule.papersRequired
+      requirement: itemCount('idea') > 0 && itemCount('paper') < rule.papersRequired
+      disabledIf: player.compute < 2
       actions:
       - id: GiveItem
         itemId: idea
@@ -833,7 +834,8 @@
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
     - message: message.developSolid
-      requirement: itemCount('idea') > 0 && player.compute >= 5 && itemCount('paper') < rule.papersRequired
+      requirement: itemCount('idea') > 0 && itemCount('paper') < rule.papersRequired
+      disabledIf: player.compute < 5
       actions:
       - id: GiveItem
         itemId: idea
@@ -865,7 +867,8 @@
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
     - message: message.developAmbitious
-      requirement: itemCount('idea') > 0 && player.compute >= 10 && !hasStatus('brokenEquipment') && itemCount('paper') < rule.papersRequired
+      requirement: itemCount('idea') > 0 && !hasStatus('brokenEquipment') && itemCount('paper') < rule.papersRequired
+      disabledIf: player.compute < 10
       actions:
       - id: GiveItem
         itemId: idea
@@ -932,7 +935,8 @@
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
     - message: message.workOnFigure
-      requirement: itemCount('majorResult') > 0 && itemCount('figure') < rule.figuresRequired * itemCount('majorResult') && !hasStatus('brokenEquipment') && player.compute >= 2 && itemCount('paper') < rule.papersRequired
+      requirement: itemCount('majorResult') > 0 && itemCount('figure') < rule.figuresRequired * itemCount('majorResult') && !hasStatus('brokenEquipment') && itemCount('paper') < rule.papersRequired
+      disabledIf: player.compute < 2
       actions:
       - id: UpdateVariable
         variable: player.compute
@@ -1550,7 +1554,7 @@
           player.exhaustionLevel: player.exhaustionLevel + 1
           player.hope: player.hope - 2
     - message: message.rebuttalExperiment
-      requirement: player.compute >= 4
+      disabledIf: player.compute < 4
       actions:
       - id: DisplayMessage
         message: message.rebuttalExperimentDone

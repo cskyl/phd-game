@@ -30,7 +30,7 @@ export interface GuiActionProxy {
      * @param message Message (potentially unlocalized) to be displayed.
      * @param choices Texts (potentially unlocalized) of choices.
      */
-    displayChoices(message: string, choices: Array<[string, number]>, icon?: string): Promise<number>;
+    displayChoices(message: string, choices: Array<[string, number, boolean?]>, icon?: string): Promise<number>;
 }
 
 /**

@@ -243,10 +243,13 @@ export class EADisplayChoices extends EventAction {
     constructor(private _message: TranslationKeySource,
                 private _choiceMessages: TranslationKeySource[],
                 private _requirements: CompiledEventExpression[],
+                private _disabledIfs: CompiledEventExpression[],
                 private _actions: EventActionList[], private _icon: string)
     {
         super();
-        if (_choiceMessages.length !== _requirements.length || _choiceMessages.length !== _actions.length) {
+        if (_choiceMessages.length !== _requirements.length ||
+            _choiceMessages.length !== _disabledIfs.length ||
+            _choiceMessages.length !== _actions.length) {
             throw new Error('The number of choices must be equal to the number of requirements/actions.');
         }
     }
@@ -281,6 +284,7 @@ export class EADisplayChoices extends EventAction {
         if (!Array.isArray(obj['choices'])) throw new Error('Choices are missing.');
         let choiceMessages: TranslationKeySource[] = [];
         let requirements: CompiledEventExpression[] = [];
+        let disabledIfs: CompiledEventExpression[] = [];
         let actions: EventActionList[] = [];
         for (const c of obj['choices']) {
             choiceMessages.push(
@@ -289,25 +293,36 @@ export class EADisplayChoices extends EventAction {
                 ? context.actionFactory.fromJSONArray(c['actions'])
                 : [];
             actions.push(new EventActionList(curActions));
-            // requirement
+            // `requirement` HIDES the choice if false (hard gate).
             if (c['requirement'] != undefined) {
                 requirements.push(
                     context.expressionCompiler.compile(c['requirement']));
             } else {
                 requirements.push(context.expressionCompiler.compile('true'));
             }
+            // `disabledIf` SHOWS the choice but greyed-out & non-clickable when
+            // true (soft gate; used for "can't afford this right now").
+            if (c['disabledIf'] != undefined) {
+                disabledIfs.push(
+                    context.expressionCompiler.compile(c['disabledIf']));
+            } else {
+                disabledIfs.push(context.expressionCompiler.compile('false'));
+            }
         }
         return new EADisplayChoices(message, choiceMessages,
-                                    requirements, actions, obj['icon'] || '');
+                                    requirements, disabledIfs, actions,
+                                    obj['icon'] || '');
     }
 
     execute(context: EventActionExecutionContext): EventActionResult | Promise<EventActionResult> {
-        // Build choice array according to requirements.
-        let choices: Array<[string, number]> = [];
+        // Build choice array. Requirement-failed choices are hidden; choices
+        // whose disabledIf is true are shown but flagged disabled.
+        let choices: Array<[string, number, boolean]> = [];
         for (let i = 0; i < this._choiceMessages.length;i++) {
             if (context.evaluator.eval(this._requirements[i])) {
+                const disabled = !!context.evaluator.eval(this._disabledIfs[i]);
                 choices.push(
-                    [this._choiceMessages[i].getTranslationKey(context), i]);
+                    [this._choiceMessages[i].getTranslationKey(context), i, disabled]);
             }
         }
         return context.actionProxy.displayChoices(

@@ -40,6 +40,10 @@ const ALLOWED_FNS = new Set([
 // e.g. the language-switch button labels in gui.yaml.
 const LITERAL_OK = new Set(['English', '中文']);
 
+// Translation keys that ARE used, but referenced from TS code rather than YAML,
+// so this scanner can't see them. Listed here to suppress "unused" warnings.
+const CODE_REFERENCED_KEYS = new Set(['ui.disabledLabel']);
+
 const errors = [];
 const warnings = [];
 const load = (f) => yaml.load(fs.readFileSync(path.join(RULESET_DIR, f), 'utf8'));
@@ -93,7 +97,7 @@ for (const lang of LANGS) {
   const dict = load(`lang.${lang}.yaml`);
   const have = new Set(Object.keys(dict));
   const missing = [...required].filter((k) => !have.has(k) && !LITERAL_OK.has(k)).sort();
-  const unused = [...have].filter((k) => !required.has(k)).sort();
+  const unused = [...have].filter((k) => !required.has(k) && !CODE_REFERENCED_KEYS.has(k)).sort();
   if (missing.length) {
     errors.push(`lang.${lang}.yaml is MISSING ${missing.length} key(s):\n    ` +
       missing.join('\n    '));
@@ -131,8 +135,8 @@ if (badStatus.size) errors.push(`Unknown statusId references: ${[...badStatus].j
 // Mirror the engine's compile step well enough to catch JS syntax errors and
 // calls to functions the evaluator does not provide. Variable references are
 // replaced with `1`; only function-call identifiers are kept and checked.
-const EXPR_FIELDS = ['condition', 'expression', 'requirement', 'probability',
-  'value', 'weight'];
+const EXPR_FIELDS = ['condition', 'expression', 'requirement', 'disabledIf',
+  'probability', 'value', 'weight'];
 const exprs = [];
 function collectExprs(node) {
   if (Array.isArray(node)) return node.forEach(collectExprs);

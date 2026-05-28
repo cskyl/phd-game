@@ -20,6 +20,7 @@ ui.hopeMeter: 希望 {{player.hope}}/100
 ui.computeMeter: 算力 {{player.compute}}
 ui.citationMeter: 引用 {{player.citations}}
 ui.hindexMeter: h指数 {{player.hindex}}
+ui.disabledLabel: "*（算力不足）*"
 ui.timeMeter: 第 {{year}} 年 第 {{month}} 月
 
 # ---------------------------------------------------------------------------

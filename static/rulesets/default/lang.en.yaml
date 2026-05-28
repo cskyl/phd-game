@@ -20,6 +20,7 @@ ui.hopeMeter: Hope {{player.hope}}/100
 ui.computeMeter: GPU {{player.compute}}
 ui.citationMeter: Citations {{player.citations}}
 ui.hindexMeter: h-index {{player.hindex}}
+ui.disabledLabel: "*(not enough GPU)*"
 ui.timeMeter: Year {{year}} Month {{month}}
 
 # ---------------------------------------------------------------------------

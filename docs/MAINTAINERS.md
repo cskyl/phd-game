@@ -107,7 +107,7 @@ An event:
 | Action | Purpose |
 |--------|---------|
 | `DisplayMessage` / `DisplayRandomMessage` | show text (`message`, `confirm`; `messages: [...]` for random) |
-| `DisplayChoices` | present `choices:` (each has `message`, optional `requirement`, `actions`) |
+| `DisplayChoices` | present `choices:` (each has `message`, optional `requirement` *(HIDE if false)*, optional `disabledIf` *(SHOW greyed-out if true; gets `ui.disabledLabel` appended; click does nothing)*, `actions`) |
 | `UpdateVariable` / `UpdateVariables` | set vars from expressions (RHS evaluated against live store) |
 | `UpdateVariableLimits` | clamp a var to `[lo, hi]` |
 | `GiveItem` / `UpdateItemAmounts` | change inventory (`updates:` keyed by item id) |
