@@ -57,6 +57,27 @@ status:
   # You released code for your work (reproducibility => citations/reputation).
   - id: codeReleased
     duration: Infinity
+  # Gameplay-difficulty statuses (set once at the start by the picker).
+  - id: easyMode
+    duration: Infinity
+    effects:
+    - attributeModifiers:
+      - target: player.paperAcceptanceBoost
+        type: Absolute
+        amount: 0.10
+      - target: player.hopeBoost
+        type: Absolute
+        amount: 1
+  - id: hardMode
+    duration: Infinity
+    effects:
+    - attributeModifiers:
+      - target: player.paperAcceptanceBoost
+        type: Absolute
+        amount: -0.05
+      - target: player.hopeBoost
+        type: Absolute
+        amount: -1
   - id: cloudStorage
     duration: Infinity
   - id: interned

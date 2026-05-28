@@ -355,6 +355,10 @@ status.fellowship: Fellowship
 status.fellowship.description: You hold a research fellowship. **Extra monthly compute** and a small acceptance bump.
 status.codeReleased: Code Released
 status.codeReleased.description: You open-sourced your work — better reproducibility and a steady stream of citations.
+status.easyMode: Easy Mode
+status.easyMode.description: Gameplay tuned easier (+10% acceptance, +1 hope/mo, fewer ablations, less scooping).
+status.hardMode: Hard Mode
+status.hardMode.description: Gameplay tuned harder (−5% acceptance, −1 hope/mo, more ablations, more scooping).
 
 # ---------------------------------------------------------------------------
 # Game setup: difficulty / advisor / subfield
@@ -362,7 +366,14 @@ status.codeReleased.description: You open-sourced your work — better reproduci
 message.chooseDifficulty: How hard do you want your PhD to be?
 message.diffEasy: "Chill (3 papers to graduate)."
 message.diffNormal: "Normal (4 papers)."
-message.diffHard: "Brutal (6 papers, more scooping)."
+message.diffHard: "Brutal (6 papers)."
+message.chooseGameDifficulty: "And how challenging should the gameplay feel? (tunes compute, reviewers, scooping, figures, hope)"
+message.gameEasy: "**Easy** — more compute, kinder reviewers, fewer ablations, less scooping."
+message.gameMedium: "**Medium** — default tuning."
+message.gameHard: "**Hard** — less compute, harsher reviewers, more figures, more scooping."
+message.gameEasyPicked: "Easy mode: +3 monthly GPU, +10% acceptance, +1 hope/mo, ablations needed 2 → 1, scoop rate ×0.7."
+message.gameMediumPicked: "Medium mode: default settings."
+message.gameHardPicked: "Hard mode: −2 monthly GPU, −5% acceptance, −1 hope/mo, ablations needed 2 → 3, scoop rate ×1.3."
 message.chooseAdvisor: Which advisor will you join?
 message.advisorFamous: "A **famous, compute-rich PI** (big lab, hands-off)."
 message.advisorFamousPicked: You join a star professor's massive lab — H100s for days and a powerful recommendation letter, but you're one of 20 students and mostly on your own.

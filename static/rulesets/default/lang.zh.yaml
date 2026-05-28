@@ -355,6 +355,10 @@ status.fellowship: 奖学金 / Fellowship
 status.fellowship.description: 你拿到了研究 fellowship。**每月额外算力**，外加一点录用加成。
 status.codeReleased: 已开源代码
 status.codeReleased.description: 你把工作开源了——可复现性更好，引用也源源不断。
+status.easyMode: 简单模式
+status.easyMode.description: 整体调得更友善（+10% 录用、+1 希望/月、图更少、被抢发更慢）。
+status.hardMode: 困难模式
+status.hardMode.description: 整体调得更严苛（−5% 录用、−1 希望/月、图更多、被抢发更快）。
 
 # ---------------------------------------------------------------------------
 # 开局设置：难度 / 导师 / 方向
@@ -362,7 +366,14 @@ status.codeReleased.description: 你把工作开源了——可复现性更好�
 message.chooseDifficulty: 你希望你的博士有多难？
 message.diffEasy: "佛系（3 篇论文毕业）。"
 message.diffNormal: "正常（4 篇）。"
-message.diffHard: "地狱（6 篇，更容易被抢发）。"
+message.diffHard: "地狱（6 篇）。"
+message.chooseGameDifficulty: "再选一个游戏难度？（调算力、审稿、被抢发、图数、希望）"
+message.gameEasy: "**简单** ——算力更多、审稿更友善、图更少、被抢发更慢。"
+message.gameMedium: "**中等** ——默认参数。"
+message.gameHard: "**困难** ——算力更少、审稿更严、图更多、被抢发更快。"
+message.gameEasyPicked: "简单：每月 +3 GPU、+10% 录用、+1 希望/月、需要的图 2 → 1、被抢发概率 ×0.7。"
+message.gameMediumPicked: "中等：默认参数。"
+message.gameHardPicked: "困难：每月 −2 GPU、−5% 录用、−1 希望/月、需要的图 2 → 3、被抢发概率 ×1.3。"
 message.chooseAdvisor: 你要加入哪位导师？
 message.advisorFamous: "**有名、算力多的大牛**（大组，放养）。"
 message.advisorFamousPicked: 你加入了一位明星教授的大组——H100 管够、推荐信很硬，但你是二十个学生之一，基本靠自己。
