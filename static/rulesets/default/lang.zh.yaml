@@ -1,0 +1,281 @@
+---
+# ============================================================================
+#  AI 博士模拟器 —— 中文语言文件
+# ============================================================================
+# 界面
+ui.ok: 好的。
+ui.items: "物品："
+ui.status: "状态："
+ui.github: GitHub
+ui.helpButton: 帮助
+ui.helpTitle: 帮助
+ui.helpContent: "你是一名 AI 方向的博士生。每个月选择 **一项** 行动：刷 arXiv 读论文、把想法跑成小实验、把它扩展成 **SOTA 结果**、做消融实验画图，然后写论文投顶会。你需要在顶级会议上发表 **{{rule.papersRequired}} 篇论文** 才能毕业。注意你的 **希望值**——一旦归零，你就退学了。结果由随机数决定，所以被拒了别往心里去。**审稿人二号有时真的很狠。**"
+ui.aboutButton: 关于
+ui.aboutTitle: 关于
+ui.aboutContent: "**AI 博士模拟器**——一款文字模拟游戏，体验机器学习博士生的日常：arXiv、显卡、NeurIPS 截稿、审稿人二号、rebuttal、被抢发和 burnout。改编自 Mianzhi Wang 的原作 **PhD Simulator**（MIT 许可证）。支持中英双语，可在页脚切换。"
+ui.seedButton: 随机种子
+ui.seedTitle: 随机种子
+ui.seedContent: "当前时间线的随机种子是 **{{@seed}}**。可分享链接：**``{{@seedUrl}}``**"
+ui.hopeMeter: 希望 {{player.hope}}/100
+ui.timeMeter: 第 {{year}} 年 第 {{month}} 月
+
+# ---------------------------------------------------------------------------
+# 物品
+# ---------------------------------------------------------------------------
+item.idea: 研究想法
+item.idea.description: 一个写在白板上的研究点子。先跑个小实验，看看有没有信号。
+item.preliminaryResult: 小规模结果
+item.preliminaryResult.description: 在小数据集（CIFAR 级别）上初见成效的结果。也许能扩展成真正拿得出手的成果。
+item.majorResult: SOTA 结果
+item.majorResult.description: 一个超越强基线的最先进结果。再配上 {{rule.figuresRequired}} 张扎实的图/消融，就能起草论文了。
+item.figure: 图表 / 消融
+item.figure.description: 一张经得起推敲的干净图表或消融实验。凑齐 {{rule.figuresRequired}} 张并配上 SOTA 结果，就能起草论文。
+item.submittedPaper: 审稿中
+item.submittedPaper.description: 一篇挂在 OpenReview 上的投稿，正等待三位匿名审稿人（和领域主席）的裁决。
+item.resubmittedPaper: 重投·审稿中
+item.resubmittedPaper.description: 改投到下一个截稿点的修改稿，正在接受新一轮审稿。
+item.paper: 已录用论文
+item.paper.description: 一篇被顶级会议录用的论文。简历上实打实的一行！
+item.rejectedPaper: 被拒稿件
+item.rejectedPaper.description: 一篇被拒的投稿。回应审稿意见、打磨后改投下一个截稿点。
+item.conferencePaper: Workshop 论文
+item.conferencePaper.description: 一篇被接收的（非存档）研讨会论文。给你的想法插了面旗，别人就不太敢抢发了。
+item.submittedConfPaper: Workshop 投稿
+item.submittedConfPaper.description: 一篇等待快速评审的研讨会投稿。
+
+# ---------------------------------------------------------------------------
+# 状态
+# ---------------------------------------------------------------------------
+status.firstYear: 新生热情
+status.firstYear.description: "每月 **+1 希望**。在收到第一封拒稿之前，一切都很令人兴奋。"
+status.brokenEquipment: 显卡集群宕机
+status.brokenEquipment.description: 集群连不上了。这个月没法跑实验。
+status.callForPapers: Workshop 征稿中
+status.callForPapers.description: 有个研讨会正在征稿。只要有小规模结果就能投一篇短文。
+status.upgradedEquipment: 新显卡节点
+status.upgradedEquipment.description: 导师搞到了一批崭新的 H100。你的实验更容易成功了。
+status.cloudStorage: 自动存档
+status.cloudStorage.description: checkpoint 会自动同步到云存储。崩了也不太容易丢结果。
+status.strongRebuttal: 强力 Rebuttal
+status.strongRebuttal.description: 你写了一份有数据支撑、令人信服的 rebuttal。录用概率暂时提升。
+status.exhaustion: Burnout（精疲力竭）
+status.exhaustion.description: "每月 **-5 希望**。该离开终端歇一歇了。"
+status.lateYearAnxiety: 高年级焦虑
+status.lateYearAnxiety.description: "每月 **-1 希望**。你总在想自己到底能不能毕业。"
+status.unhappyAdvisor: 导师不满
+status.unhappyAdvisor.description: "每月 **-5 希望**。导师对你最近的进展不太满意。"
+
+# ---------------------------------------------------------------------------
+# 资格考试
+# ---------------------------------------------------------------------------
+message.qualifyNotice: "院系通知：所有博士生必须通过 **十二月的资格考试（qualifying exam）**。"
+message.prepareQualify: 复习资格考试。
+message.qualifyLevelUp: 你对通过资格考试更有信心了。
+message.qualifyLevelMax: 你对通过资格考试 **信心十足**。
+message.qualifyPassed: 你 **通过** 了资格考试。
+message.qualifyFailed: 你 **没通过** 资格考试。
+
+# ---------------------------------------------------------------------------
+# Burnout
+# ---------------------------------------------------------------------------
+message.exhaustion: 连续几个月赶 ddl、凌晨三点盯着 training run，你开始 burnout，怎么都集中不了精神。
+message.exhaustionBreak: 导师注意到你最近状态很差，给你发了一篇关于可持续科研和工作生活平衡的文章。
+message.takeBreak: 跟导师请几天假。
+message.recoveredAfterBreak: 导师批了假。你退出 Slack、好好睡了几觉，回来后 **满血复活**。
+message.noBreak: 我没事，真的。
+message.exhaustionIgnored: 你告诉自己 ddl 更重要，继续埋头肝。
+message.exhaustionBadMonth: 你盯着 loss 曲线看了好几个小时，啥也没看进去。脑子已经烧干，得真正休息一下了。
+message.exhaustionNoProgress: 你逼自己继续写代码，但没什么用。这个月毫无进展。
+
+# ---------------------------------------------------------------------------
+# 高年级焦虑
+# ---------------------------------------------------------------------------
+message.lateYearAnxiety: 已经第三年了。你看着一届又一届师兄师姐答辩离开，开始担心自己能不能按时毕业。
+
+# ---------------------------------------------------------------------------
+# 算力 / 经费
+# ---------------------------------------------------------------------------
+message.fundingRises: "AI 新闻：大批新基金和企业捐赠涌入 ML 实验室。一位项目主管宣称：「算力就是新时代的石油。」"
+message.fundingFalls: "AI 新闻：显卡价格暴涨，本财年多项经费被冻结。各实验室的算力预算恐将收紧。"
+message.moreFunding: 导师拿到了一个新基金（外加一大笔云算力额度）。整个实验室都在庆祝。
+message.lessFunding: 导师的经费续期卡住了。实验室开始悄悄地限制 GPU 时长。
+message.lostFunding: 一笔云账单到期，某个项目的 **算力预算被砍**。实验室人心惶惶。
+
+# ---------------------------------------------------------------------------
+# 导师不满
+# ---------------------------------------------------------------------------
+message.unhappyAdvisor: 导师对你最近的进展不太满意。「科研很难，但我希望看到你更有冲劲一点。」
+message.advisorHappyAgain: 导师对你最近的进展看起来很满意。
+
+# ---------------------------------------------------------------------------
+# 主线流程
+# ---------------------------------------------------------------------------
+message.beginning: 恭喜——你被一所顶尖 AI 博士项目 **录取** 了。接受这个 offer 吗？
+message.acceptOffer: 接受 offer。
+message.acceptedOffer: 你接受了 offer 并加入了一个实验室。要毕业，你必须在顶级会议（NeurIPS / ICML / ICLR / CVPR / ACL 之类）上至少发表 **{{rule.papersRequired}} 篇论文**。
+message.declineOffer: 拒绝，去大厂工作。
+message.declinedOffer: 你拒绝了 offer，转而接了一份高薪的研究工程师岗位。也许这才是更明智的时间线。
+message.newMonth: 新的一个月开始了。来看看待办清单。
+message.readPapers: 刷 arXiv 读论文。
+message.gainNewIdea1: 刷了一堆 arXiv 摘要后，一个 **新研究想法** 突然冒了出来。
+message.gainNewIdea2: 盯着某篇论文的相关工作看了几个小时，你发现了一个空白，得到了 **一个新想法**。
+message.workOnIdea: 把一个想法跑成小实验。
+message.oldIdea1: 你把想法讲给导师听，导师翻出一篇 2019 年的论文——人家早就做过一模一样的了。
+message.oldIdea2: 导师觉得这个想法太 incremental，让你想得更大一点。
+message.oldIdea3: 导师觉得新意不够，让你再多读读近期文献。
+message.oldIdea4: 你灵感爆发想了一堆点子——结果在 Semantic Scholar 上一搜，每一个都已经有人发过了。
+message.noIdea1: 你开了 60 个 arXiv 标签页，浏览器直接 **崩溃** 了。你彻底忘了自己刚才在读什么。
+message.gainPrelimResult: 这个想法在小数据集上出信号了！你有了一个 **小规模结果**。
+message.ideaNotWorking: 这个想法没跑出花来——和 baseline 没区别。换下一个吧。
+message.workOnPrelimResult: 把小规模结果扩展上去。
+message.gainMajorResult: 它 scale 上去了！你超过了强基线，拿到了一个 **SOTA 结果**。
+message.noMajorResult1: 你确信这里面有真东西，但一上规模训练就发散。还得再花点时间。
+message.noMajorResult2: 导师发现了一个数据泄露的 bug，把你的指标都刷高了。回炉重造吧。
+message.workOnFigure: 跑消融实验、画图。
+message.gainFigure: 消融干净又有说服力。你做出了一张漂亮的 **图**。
+message.noFigure1: 结果噪声很大、不够显著。你需要更多随机种子和更多算力。
+message.noFigure2: 你的任务 **CUDA out of memory**，在第 47 个 epoch 挂了。得用 gradient checkpointing 重跑。
+message.noFigure3: 训练比预期慢得多；结果还没出来。
+message.noFigure4: 一次依赖升级把环境搞崩了。你花了好几天对齐 CUDA / PyTorch 版本，还得再要点时间。
+message.lostData: 一个节点跑到一半崩了，checkpoint 全没了。实验只能重跑。
+message.lostDataRecovered: 一个节点跑到一半崩了——但自动存档从云端 **恢复** 了一切，你顺利拿到了 **图**。
+message.wrongFigure: 你的几个数字互相矛盾，eval 里肯定有 bug。得花时间排查。
+message.workOnPaper: 写论文。
+message.draftPaperComplete: 你赶在 ddl 前写完了初稿并 **投出去** 了！
+message.draftPaperIncomplete1: 导师这一轮太忙，没来得及看你的稿子。
+message.draftPaperIncomplete2: 尽管你很努力，相关工作部分还得再补。没写完。
+message.draftPaperIncomplete3: 尽管你很努力，实验部分还需要更多分析。没写完。
+message.draftPaperIncomplete4: 你整个月都在和 LaTeX 的图片排版以及 9 页篇幅限制搏斗。还是没写完。
+message.draftPaperIncomplete5: 还有几个小节只写了一半。快了快了。
+message.draftPaperIncomplete6: 导师看完初稿，要求把摘要和引言彻底重写。
+message.draftPaperIncomplete7: 导师指出好几张图不够有说服力。你得再花时间改。
+message.paperAccepted: "OPENREVIEW：很高兴地通知你，你的投稿已被 **录用**！平均评分：strong accept。"
+message.paperRejected1: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。审稿人二号写道：「新意有限，相比已有工作只是 incremental 的改动。」"
+message.paperRejected2: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人在你的理论推导里发现了漏洞。"
+message.paperRejected3: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「提升都在噪声范围内，而且没报告 error bar。」"
+message.paperRejected4: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人要求再补三个更新的 baseline 对比。"
+message.paperRejected5: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「为什么 work？没有任何洞见或分析。」"
+message.paperRejected6: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人觉得论文读不下去、符号前后不一致。"
+message.paperRejected7: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人质疑结果在你精挑细选的设置之外是否还成立。"
+message.paperRejected8: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「有点意思，但够不上 NeurIPS 级别的贡献。」"
+message.paperRejected9: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人要求在 ImageNet 规模的数据和一个 7B 模型上补实验。"
+message.paperRejected10: "OPENREVIEW：很遗憾地通知你，你的投稿被 **拒** 了。一位审稿人写道：「没有提供代码或可复现性声明。评分：3。」"
+message.revisePaper: 修改并重投被拒的论文。
+message.revisionComplete: 你逐条回应了审稿意见、补了人家要的实验，改投到了下一个截稿点。
+message.resubmittedPaperAccepted: "OPENREVIEW：好消息——你的重投稿件被 **录用** 了！"
+message.resubmittedPaperRejected1: "OPENREVIEW：很遗憾地通知你，你的重投又被 **拒** 了。（你抽到了同一个审稿人二号。）"
+message.slackOff: 摸鱼（出去透透气）。
+message.caughtSlackOff1: 导师发现你一周没上 Slack，甩给你一长串 TODO。
+message.caughtSlackOff2: 导师路过实验室，发现你的位置空着，发邮件问你进展。
+message.caughtSlackOff3: 导师连发三条消息没人回，转头在组里问你上次 push 代码是什么时候。
+message.slackOffSuccess: 你去爬了山，一整个周末没碰 OpenReview，重新找回了人的感觉。
+message.lostAllHope: 你失去了所有希望，**退学** 去业界工作了。
+message.overdue: 你 **耗尽了时间**，没能完成博士学位。
+message.workOnThesis: 写论文并进行答辩。
+message.graduated: 恭喜！你把几篇论文装订成了毕业论文并通过了答辩。你 **拿到了博士学位**！从今天起请叫你「博士」。为自己骄傲吧！
+
+# ---------------------------------------------------------------------------
+# 被抢发
+# ---------------------------------------------------------------------------
+message.ideaDoneByOthers: 你一觉醒来，发现一篇 **arXiv 预印本** 做的正是你的想法。被抢发了。这个想法没法继续了。
+message.prelimDoneByOthers: 一个算力是你十倍的实验室刚把你的初步结果挂上了 arXiv。又被抢发了。
+message.goodIdea: 导师觉得这个想法确实很有前途。你受到了鼓舞。
+message.figureInvalid: 重新检查 eval 脚本时，你发现一个 bug 让其中一张图作废了。这个实验得重跑。
+
+# ---------------------------------------------------------------------------
+# 显卡集群 / 基础设施
+# ---------------------------------------------------------------------------
+message.equipmentBroken: 显卡集群宕机了——一个机柜过热，调度器没响应。
+message.doNothing: 干等着。
+message.cannotUseEquipment: 集群恢复之前你跑不了任何实验。太难受了。
+message.fixEquipment: 自己动手 debug。
+message.contactEquipmentSupport: 给运维提工单。
+message.equipmentFixed: 你找到了挂掉的节点、把它 drain 掉并重新提交了任务。搞定！感谢 SLURM。
+message.equipmentNotFixed: 你折腾了好几个小时，队列还是卡着不动。
+message.equipmentFixedByTechSupport: 运维重启了机柜，你的任务又跑起来了。
+message.equipmentNotFixedByTechSupport: 运维在处理了，但问题比预想的更深，还得再修一阵子。
+message.newEquipment: 导师给实验室买了一台崭新的 **H100 节点**。所有人都乐疯了。
+message.cloudStorage: "实验室公告：组里配置了到云存储的 **自动 checkpoint**。你的 run 现在安全了。"
+
+# ---------------------------------------------------------------------------
+# Workshop / 会议周期
+# ---------------------------------------------------------------------------
+message.callForPapers: 一个 **NeurIPS workshop** 刚刚开始征稿，投稿窗口持续 **6 个月**——只要你有一个小规模结果，就能投一篇短文。
+message.workOnConf: 写一篇 workshop 论文。
+message.finishedConfPaper: 你写完了 workshop 论文并投了出去！
+message.confPaperRejected: 你的 workshop 投稿被 **拒** 了——审稿人觉得还不够成熟。不过这个结果你还能继续做。
+message.confPaperAccepted1: "收件箱：你的工作被 workshop 接收为 **海报（poster）**。该做海报了。"
+message.confPaperAccepted2: "收件箱：你的工作被 workshop 接收为 **spotlight 报告**。恭喜！"
+message.attendConf: 你抵达 **NeurIPS** 会议中心并完成了你的报告。来看看明天的日程安排。
+message.skipConfSession: 翘掉会议，去逛逛这座城市。
+message.confNiceTour1: 这座城市美极了，散完步回来你元气满满。
+message.confNiceTour2: 你发现了一家很棒的小馆子，吃得相当满足。
+message.skipConfSessionFail1: 翘会的时候你撞见了导师。尴尬。
+message.skipConfSessionFail2: 导师在实验室的海报前找你，结果没找到。
+message.attendConfSession: 去听报告，在 poster session 上社交。
+message.confNewIdea: 你听了一个很赞的报告，会后在海报前一聊，蹦出了 **一个新想法**。
+message.confNoNewIdea: 报告很精彩，会议晚宴更精彩。
+
+# ---------------------------------------------------------------------------
+# 导师提醒
+# ---------------------------------------------------------------------------
+message.qualifyReminder: 导师担心你没在准备资格考试，叮嘱你要认真对待。
+message.tooManyIdeas: 导师发邮件：「你点子够多了——现在请把其中一个做成真正的结果。」
+message.notEnoughPapers: 导师催你的发表数量，显然急着想看到更多录用的论文。
+message.rejectedPaperAdvisor: 导师就这次拒稿给你发消息：「别被审稿人二号影响。冷静一下、回应意见、改投。」
+
+# ---------------------------------------------------------------------------
+# Rebuttal 阶段（新增）
+# ---------------------------------------------------------------------------
+message.rebuttalPeriod: 审稿意见出来了，**rebuttal 阶段** 开始了。分数有高有低。你要花一周写 rebuttal 吗？
+message.writeRebuttal: 写一份有数据支撑的强力 rebuttal。
+message.rebuttalWritten: 你补做了审稿人想要的额外实验，写了一份逐条回应、干净利落的 rebuttal。录用概率暂时 **提升**。
+message.skipRebuttal: 算了——分数不会动的。
+message.rebuttalSkipped: 你觉得结局已定，放弃了写 rebuttal。
+
+# ---------------------------------------------------------------------------
+# 业界实习（新增）
+# ---------------------------------------------------------------------------
+message.internshipOffer: 一家顶级业界实验室（某前沿大模型团队）给你发来 **暑期研究实习** 邀请——海量算力、聪明的 mentor，还有可能发一篇论文。接吗？
+message.acceptInternship: 接受实习。
+message.internshipAccepted: 你用着几乎无限的 GPU、和一群聪明的合作者度过了一个夏天。回来时你带回了 **一个新想法**、新的算力额度和满满的干劲——尽管导师有点希望你留下来推进毕业论文。
+message.declineInternship: 留下来专注毕业论文。
+message.internshipDeclined: 你婉拒了邀请，留下来专注自己的研究。导师对你的投入感到很欣慰。
+
+# ---------------------------------------------------------------------------
+# 随机士气事件
+# ---------------------------------------------------------------------------
+message.paperCited: 你最近的论文引用量在涨（X 上也多了几个关注者）。你感到被认可了。
+message.seminar1: 这个月你参加了一场组会 seminar，讲者的 slides 让你蹦出了 **一个新想法**。
+message.seminar2: 这个月你参加了一场 seminar，Q&A 里一个犀利的问题给了你 **一个新想法**。
+message.seminar3: 一位杰出讲者做了一场鼓舞人心的报告，你突然有了 **一个新想法**。
+message.showerIdea: 那个缺失的小技巧在洗澡时灵光一现。你的一个小规模结果一下子变成了 **SOTA 结果**。
+message.randomHope1: 市中心新开了一个 AI 艺术展。你去看了，非常喜欢。你感到放松了。
+message.randomHope2: 校园附近有一场免费露天音乐会。你让音乐冲走了 ddl 的压力。
+message.randomHope3: 实验室办了一场论文录用庆功会。美食与好友相伴，你感觉好多了。
+message.randomHope4: 你公寓附近新开了一家拉面店。你去吃了，太好吃了，感觉好多了。
+message.randomHope5: 购物车里那把机械键盘终于打折了。你秒下单，心情大好。
+message.modelViral1: 你开源了你的模型，它冲上了 **Hugging Face 热榜**。你的 GitHub star 数在疯涨。
+message.modelViral2: 你方法的一个 demo 一夜之间在 **X 上爆火**。连一位知名研究者都转发了。
+
+# ---------------------------------------------------------------------------
+# 确认按钮
+# ---------------------------------------------------------------------------
+message.oops: 啊哦。
+message.great: 太好了。
+message.cool: 不错。
+message.ok: 好的。
+message.gotit: 知道了。
+message.workingOnIt: 在弄了在弄了。
+message.excited: 冲！
+message.finally: 终于。
+message.hope: 但愿如此。
+message.encouraging: 挺受鼓舞的。
+message.shame: 真可惜。
+message.sucks: 太糟了。
+message.party: 该庆祝一下了！
+message.soundsInteresting: 听起来有戏。
+message.unfortunate: 真不走运。
+message.restart: 倒带重来。
+message.restartNewTimeline: 跳到另一条时间线重新开始。
+message.hopeAccepted: 希望这次能中。

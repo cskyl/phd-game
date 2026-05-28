@@ -12,6 +12,21 @@ statsBar:
       styleClasses: ["warning"]
     - condition: player.hope <= 20
       styleClasses: ["critical"]
+  - text: ui.computeMeter
+    side: left
+    updateTrigger:
+      variables: ["player.compute"]
+    conditionalStyles:
+    - condition: player.compute >= 4
+      styleClasses: ["normal"]
+    - condition: player.compute < 4 && player.compute >= 2
+      styleClasses: ["warning"]
+    - condition: player.compute < 2
+      styleClasses: ["critical"]
+  - text: ui.citationMeter
+    side: right
+    updateTrigger:
+      variables: ["player.citations"]
   - text: ui.timeMeter
     side: right
     updateTrigger:
@@ -34,17 +49,21 @@ statusList:
 footer:
   preamble:
   buttons:
-    - text: ui.github
-      url: https://github.com/morriswmz/phd-game
+    - text: "English"
+      setLanguage: en
+    - text: "中文"
+      setLanguage: zh
     - text: ui.helpButton
       messageTitle: ui.helpTitle
       message: ui.helpContent
       confirmText: ui.ok
-    - text: ui.privacyNoticeButton
-      messageTitle: ui.privacyNoticeTitle
-      message: ui.privacyNoticeContent
+    - text: ui.aboutButton
+      messageTitle: ui.aboutTitle
+      message: ui.aboutContent
       confirmText: ui.ok
     - text: ui.seedButton
       messageTitle: ui.seedTitle
       message: ui.seedContent
       confirmText: ui.ok
+    - text: ui.github
+      url: https://github.com/morriswmz/phd-game

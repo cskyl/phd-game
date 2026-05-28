@@ -7,8 +7,6 @@ status:
       - target: player.hopeBoost
         type: Absolute
         amount: 1
-  - id: callForPapers
-    duration: 6
   - id: brokenEquipment
     duration: 1
   - id: upgradedEquipment
@@ -20,6 +18,32 @@ status:
         amount: 0.3
   - id: cloudStorage
     duration: Infinity
+  - id: preprinted
+    duration: Infinity
+  - id: strongRebuttal
+    duration: 2
+    effects:
+    - attributeModifiers:
+      - target: player.paperAcceptanceBoost
+        type: Absolute
+        amount: 0.35
+  - id: wellCited
+    duration: Infinity
+    effects:
+    - attributeModifiers:
+      - target: player.paperAcceptanceBoost
+        type: Absolute
+        amount: 0.10
+  - id: influential
+    duration: Infinity
+    effects:
+    - attributeModifiers:
+      - target: player.paperAcceptanceBoost
+        type: Absolute
+        amount: 0.15
+      - target: player.hopeBoost
+        type: Absolute
+        amount: 1
   - id: exhaustion
     duration: Infinity
     effects:

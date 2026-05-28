@@ -17,10 +17,17 @@ export interface GuiFooterMessageButtonDefinition {
   icon?: string;
 }
 
+// A button that switches the game language and reloads.
+export interface GuiFooterLanguageButtonDefinition {
+  text: string;
+  styleClasses?: string[];
+  setLanguage: string;
+}
+
 export interface GuiFooterDefinition {
   // Localizable text before all buttons.
   preamble?: string;
-  buttons: Array<GuiFooterLinkButtonDefinition | GuiFooterMessageButtonDefinition>;
+  buttons: Array<GuiFooterLinkButtonDefinition | GuiFooterMessageButtonDefinition | GuiFooterLanguageButtonDefinition>;
 }
 
 // The footer GUI component, where help, privacy notice, copyright notice, etc.
@@ -58,6 +65,15 @@ export class GuiFooter extends GuiBase<HTMLElement> {
       }
       if ('url' in buttonDef) {
         button.href = buttonDef.url;
+      } else if ('setLanguage' in buttonDef) {
+        button.href = '#';
+        button.onclick = (event) => {
+          event.preventDefault();
+          const setLang = (window as any).setGameLanguage;
+          if (typeof setLang === 'function') {
+            setLang(buttonDef.setLanguage);
+          }
+        };
       } else {
         localizer.addRequiredKey(buttonDef.messageTitle);
         localizer.addRequiredKey(buttonDef.message);

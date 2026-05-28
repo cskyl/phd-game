@@ -6,16 +6,20 @@
   - id: UpdateVariableLimits
     updates:
       player.hope: [0, 100]
+      player.compute: [0, 40]
   - id: UpdateVariables
     updates:
       elapsedMonth: 0
       month: 1
       year: 1
       player.hope: 50
-      # number of papers read by the player
+      # GPU / compute budget (in arbitrary units)
+      player.compute: 3
+      # total citations accumulated by your published & preprinted work
+      player.citations: 0
+      # reputation / impact stock; drives citation growth and acceptance odds
+      player.pubWeight: 0
       player.readPapers: 0
-      player.rulesBroken: 0
-      player.canAttendConf: 0
       player.qualifyLevel: 0
       player.monthSkipped: 0
       player.exhaustionLevel: 0
@@ -69,6 +73,7 @@
         confirm: message.restartNewTimeline
         winning: true
     confirm: message.excited
+# Monthly upkeep: hope drift + compute regeneration.
 - id: CommonVariableUpdates
   trigger: MonthBegin
   actions:
@@ -76,6 +81,7 @@
     updates:
       player.hope: player.hope + getAttributeValue('player.hopeBoost')
       player.monthSkipped: 0
+      player.compute: clip(player.compute + 2 + advisor.fundingLevel + hasStatus('upgradedEquipment') * 2, 0, 40)
 - id: LostAllHope
   trigger: MonthBegin
   conditions:
@@ -96,15 +102,74 @@
     message: message.overdue
     confirm: message.restart
     winning: false
-# Equipment event
+# ===========================================================================
+# Citation system
+# ===========================================================================
+# Citations accrue every month, scaled by your reputation (pubWeight).
+- id: CitationGrowth
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: player.pubWeight > 0
+  actions:
+  - id: UpdateVariable
+    variable: player.citations
+    value: player.citations + round(player.pubWeight * (1 + random() * 2))
+- id: WellCitedMilestone
+  trigger: MonthBegin
+  once: true
+  conditions:
+  - id: Expression
+    expression: player.citations >= 50
+  actions:
+  - id: DisplayMessage
+    message: message.wellCitedNow
+    confirm: message.great
+  - id: SetStatus
+    statusId: wellCited
+    on: true
+  - id: UpdateVariable
+    variable: player.hope
+    value: player.hope + 5
+- id: InfluentialMilestone
+  trigger: MonthBegin
+  once: true
+  conditions:
+  - id: Expression
+    expression: player.citations >= 200
+  actions:
+  - id: DisplayMessage
+    message: message.influentialNow
+    confirm: message.party
+  - id: SetStatus
+    statusId: influential
+    on: true
+  - id: SetStatus
+    statusId: wellCited
+    on: false
+  - id: UpdateVariables
+    updates:
+      player.hope: player.hope + 8
+      advisor.happiness: advisor.happiness + 3
+# Compute crunch tutorial nudge (shows once when you are starved of GPUs).
+- id: ComputeCrunch
+  trigger: MonthBegin
+  once: true
+  probability: 0.6
+  conditions:
+  - id: Expression
+    expression: player.compute < 2 && (itemCount('preliminaryResult') > 0 || itemCount('majorResult') > 0)
+  actions:
+  - id: DisplayMessage
+    message: message.computeStarved
+    confirm: message.gotit
+# GPU cluster outage
 - id: EquipmentBroken
   trigger: MonthBegin
   conditions:
   - id: Expression
     expression: (month >= 4 || year > 1) && !hasStatus('brokenEquipment')
   probability: 0.04
-  exclusions:
-  - EquipmentRepaired
   actions:
   - id: DisplayChoices
     message: message.equipmentBroken
@@ -163,7 +228,7 @@
   probability: 0.08
   conditions:
   - id: Expression
-    expression: year >= 2 && advisor.fundingLevel >= 1 # must have sufficient funding
+    expression: year >= 2 && advisor.fundingLevel >= 1
   actions:
   - id: DisplayMessage
     message: message.newEquipment
@@ -171,10 +236,12 @@
   - id: SetStatus
     statusId: upgradedEquipment
     on: true
-  # the upgrade also fixes broken equipment
   - id: SetStatus
     statusId: brokenEquipment
     on: false
+  - id: UpdateVariable
+    variable: player.compute
+    value: clip(player.compute + 4, 0, 40)
 - id: CloudStorage
   trigger: YearBegin
   once: true
@@ -189,7 +256,7 @@
   - id: SetStatus
     statusId: cloudStorage
     on: true
-# Exhaustion event
+# Burnout
 - id: Exhaustion
   trigger: MonthBegin
   probability: 0.7
@@ -264,7 +331,6 @@
       - id: UpdateVariable
         variable: player.hope
         value: player.hope - 5
-# Late year event
 - id: LateYearAnxiety
   trigger: YearBegin
   once: true
@@ -278,7 +344,7 @@
   - id: SetStatus
     statusId: lateYearAnxiety
     on: true
-# Qualify
+# Qualifying exam
 - id: Qualify
   trigger: MonthBegin
   once: true
@@ -300,7 +366,9 @@
       winning: false
       message: message.qualifyFailed
       confirm: message.restart
-# Funding event chain
+# ===========================================================================
+# Compute budget / funding
+# ===========================================================================
 - id: FundingChange
   trigger: YearBegin
   conditions:
@@ -320,6 +388,7 @@
         updates:
           advisor.fundingLevel: advisor.fundingLevel + global.fundingChange
           player.hope: player.hope + 5
+          player.compute: clip(player.compute + 5, 0, 40)
     - condition: global.fundingChange < 0
       actions:
       - id: DisplayMessage
@@ -380,7 +449,7 @@
         confirm: message.gotit
       - id: SetStatus
         statusId: unhappyAdvisor
-        on: true 
+        on: true
     - condition: advisor.happiness >= 0 && hasStatus('unhappyAdvisor')
       actions:
       - id: DisplayMessage
@@ -389,8 +458,13 @@
       - id: SetStatus
         statusId: unhappyAdvisor
         on: false
-# Main choices
-# idea -> prelim -> major -> 2 figures -> submitted paper
+# ===========================================================================
+# Main monthly action menu
+# Pipeline: read -> idea -> (compute) experiment -> prelim
+#           -> (compute) scale-up / train-large-model -> SOTA result
+#           -> (compute) ablations -> figures -> write -> draft
+#           -> submit at a real conference deadline -> review -> paper
+# ===========================================================================
 - id: MonthBeginTasks
   trigger: MonthBegin
   conditions:
@@ -434,7 +508,6 @@
         variable: player.readPapers
         value: player.readPapers + 1
       - id: CoinFlip
-        # increase the success rate as the player reads more papers
         probability: 0.60 + player.readPapers / 100 - itemCount('idea') / 20
         success:
         - id: GiveItem
@@ -445,7 +518,6 @@
           - message.gainNewIdea1
           - message.gainNewIdea2
           confirm: message.great
-        # possibly a good idea
         - id: CoinFlip
           probability: 0.2
           success:
@@ -471,11 +543,14 @@
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
     - message: message.workOnIdea
-      requirement: itemCount('idea') > 0 && itemCount('paper') < rule.papersRequired
+      requirement: itemCount('idea') > 0 && player.compute >= 1 && itemCount('paper') < rule.papersRequired
       actions:
       - id: GiveItem
         itemId: idea
         amount: -1
+      - id: UpdateVariable
+        variable: player.compute
+        value: player.compute - 1
       - id: CoinFlip
         probability: min(0.50 + player.readPapers / 50, 0.8)
         success:
@@ -499,8 +574,11 @@
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
     - message: message.workOnPrelimResult
-      requirement: itemCount('preliminaryResult') > 0 && itemCount('paper') < rule.papersRequired
+      requirement: itemCount('preliminaryResult') > 0 && player.compute >= 3 && itemCount('paper') < rule.papersRequired
       actions:
+      - id: UpdateVariable
+        variable: player.compute
+        value: player.compute - 3
       - id: Random
         groups:
         - weight: 0.5
@@ -528,22 +606,44 @@
       - id: UpdateVariable
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
-    - message: message.workOnConf
-      requirement: hasStatus('callForPapers') && itemCount('preliminaryResult') > 0 && itemCount('submittedConfPaper') === 0 && itemCount('paper') < rule.papersRequired
+    - message: message.trainLargeModel
+      requirement: itemCount('preliminaryResult') > 0 && player.compute >= 8 && !hasStatus('brokenEquipment') && itemCount('paper') < rule.papersRequired
       actions:
-      - id: DisplayMessage
-        message: message.finishedConfPaper
-        confirm: message.great
-      - id: UpdateItemAmounts
-        updates:
-          submittedConfPaper: 1
-          preliminaryResult: -1
+      - id: UpdateVariable
+        variable: player.compute
+        value: player.compute - 8
+      - id: CoinFlip
+        probability: min(0.65 + getAttributeValue('player.experimentBoost'), 0.9)
+        success:
+        - id: DisplayMessage
+          message: message.largeModelSuccess
+          confirm: message.party
+        - id: UpdateItemAmounts
+          updates:
+            majorResult: 1
+            preliminaryResult: -1
+            figure: 1
+        - id: UpdateVariables
+          updates:
+            player.hope: player.hope + 8
+            player.pubWeight: player.pubWeight + 2
+            player.citations: player.citations + randi(10) + 5
+        fail:
+        - id: DisplayMessage
+          message: message.largeModelFail
+          confirm: message.sucks
+        - id: UpdateVariable
+          variable: player.hope
+          value: player.hope - 6
       - id: UpdateVariable
         variable: player.exhaustionLevel
         value: player.exhaustionLevel + 1
     - message: message.workOnFigure
-      requirement: itemCount('majorResult') > 0 && itemCount('figure') < rule.figuresRequired * itemCount('majorResult') && !hasStatus('brokenEquipment') && itemCount('paper') < rule.papersRequired
+      requirement: itemCount('majorResult') > 0 && itemCount('figure') < rule.figuresRequired * itemCount('majorResult') && !hasStatus('brokenEquipment') && player.compute >= 2 && itemCount('paper') < rule.papersRequired
       actions:
+      - id: UpdateVariable
+        variable: player.compute
+        value: player.compute - 2
       - id: Random
         groups:
         - weight: 0.5 + getAttributeValue('player.experimentBoost')
@@ -614,7 +714,7 @@
           confirm: message.great
         - id: UpdateItemAmounts
           updates:
-            submittedPaper: 1
+            paperDraft: 1
             majorResult: -1
             figure: -rule.figuresRequired
         - id: UpdateVariables
@@ -632,6 +732,20 @@
           - message.draftPaperIncomplete6
           - message.draftPaperIncomplete7
           confirm: message.ok
+    - message: message.postPreprint
+      requirement: (itemCount('majorResult') > 0 || itemCount('paperDraft') > 0) && !hasStatus('preprinted') && itemCount('paper') < rule.papersRequired
+      actions:
+      - id: DisplayMessage
+        message: message.preprintPosted
+        confirm: message.cool
+      - id: SetStatus
+        statusId: preprinted
+        on: true
+      - id: UpdateVariables
+        updates:
+          player.pubWeight: player.pubWeight + 1
+          player.citations: player.citations + randi(5) + 1
+          player.hope: player.hope + 3
     - message: message.revisePaper
       requirement: itemCount('rejectedPaper') > 0 && itemCount('paper') < rule.papersRequired
       actions:
@@ -640,7 +754,7 @@
         confirm: message.hopeAccepted
       - id: UpdateItemAmounts
         updates:
-          resubmittedPaper: 1
+          paperDraft: 1
           rejectedPaper: -1
       - id: UpdateVariable
         variable: player.exhaustionLevel
@@ -660,7 +774,6 @@
             confirm: message.oops
           - id: UpdateVariables
             updates:
-              # player.hope: player.hope - 10
               advisor.happiness: advisor.happiness - 2
         - weight: 2
           actions:
@@ -676,31 +789,141 @@
       - id: SetStatus
         statusId: exhaustion
         on: false
-# Review events
-# submitted -> accept
-#           -> reject -> resubmit -> accept
-#                                 -> reject -> resubmit ...
-- id: PaperReview
+# ===========================================================================
+# Real conference submission calendar (game month == calendar month)
+#   ICLR    : submit Sep (9)  -> decide Jan (1)
+#   ICML    : submit Feb (2)  -> decide May (5)
+#   NeurIPS : submit May (5)  -> decide Sep (9)
+#   CVPR    : submit Nov (11) -> decide Feb (2)
+# You hold a draft and choose which open deadline to target.
+# ===========================================================================
+- id: DeadlineICLR
   trigger: MonthBegin
-  probability: 0.60
   conditions:
   - id: Expression
-    expression: itemCount('submittedPaper') >= 1
+    expression: month === 9 && itemCount('paperDraft') > 0 && itemCount('submittedICLR') === 0
+  actions:
+  - id: DisplayChoices
+    message: message.deadlineICLR
+    choices:
+    - message: message.submitICLR
+      actions:
+      - id: DisplayMessage
+        message: message.submittedToICLR
+        confirm: message.hopeAccepted
+      - id: UpdateItemAmounts
+        updates:
+          paperDraft: -1
+          submittedICLR: 1
+      - id: UpdateVariable
+        variable: player.exhaustionLevel
+        value: player.exhaustionLevel + 1
+    - message: message.holdSubmission
+      actions:
+      - id: DisplayMessage
+        message: message.heldSubmission
+        confirm: message.ok
+- id: DeadlineICML
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: month === 2 && itemCount('paperDraft') > 0 && itemCount('submittedICML') === 0
+  actions:
+  - id: DisplayChoices
+    message: message.deadlineICML
+    choices:
+    - message: message.submitICML
+      actions:
+      - id: DisplayMessage
+        message: message.submittedToICML
+        confirm: message.hopeAccepted
+      - id: UpdateItemAmounts
+        updates:
+          paperDraft: -1
+          submittedICML: 1
+      - id: UpdateVariable
+        variable: player.exhaustionLevel
+        value: player.exhaustionLevel + 1
+    - message: message.holdSubmission
+      actions:
+      - id: DisplayMessage
+        message: message.heldSubmission
+        confirm: message.ok
+- id: DeadlineNeurIPS
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: month === 5 && itemCount('paperDraft') > 0 && itemCount('submittedNeurIPS') === 0
+  actions:
+  - id: DisplayChoices
+    message: message.deadlineNeurIPS
+    choices:
+    - message: message.submitNeurIPS
+      actions:
+      - id: DisplayMessage
+        message: message.submittedToNeurIPS
+        confirm: message.hopeAccepted
+      - id: UpdateItemAmounts
+        updates:
+          paperDraft: -1
+          submittedNeurIPS: 1
+      - id: UpdateVariable
+        variable: player.exhaustionLevel
+        value: player.exhaustionLevel + 1
+    - message: message.holdSubmission
+      actions:
+      - id: DisplayMessage
+        message: message.heldSubmission
+        confirm: message.ok
+- id: DeadlineCVPR
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: month === 11 && itemCount('paperDraft') > 0 && itemCount('submittedCVPR') === 0
+  actions:
+  - id: DisplayChoices
+    message: message.deadlineCVPR
+    choices:
+    - message: message.submitCVPR
+      actions:
+      - id: DisplayMessage
+        message: message.submittedToCVPR
+        confirm: message.hopeAccepted
+      - id: UpdateItemAmounts
+        updates:
+          paperDraft: -1
+          submittedCVPR: 1
+      - id: UpdateVariable
+        variable: player.exhaustionLevel
+        value: player.exhaustionLevel + 1
+    - message: message.holdSubmission
+      actions:
+      - id: DisplayMessage
+        message: message.heldSubmission
+        confirm: message.ok
+# --- Decisions (notification months) ---
+- id: DecisionICLR
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: month === 1 && itemCount('submittedICLR') > 0
   actions:
   - id: CoinFlip
-    probability: getAttributeValue('player.paperAcceptanceBoost') + 0.25
+    probability: clip(0.32 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
     success:
     - id: DisplayMessage
-      message: message.paperAccepted
+      message: message.acceptedICLR
       confirm: message.party
     - id: UpdateItemAmounts
       updates:
-        submittedPaper: -1
+        submittedICLR: -1
         paper: 1
     - id: UpdateVariables
       updates:
-        player.hope: player.hope + 10
+        player.hope: player.hope + 12
         advisor.happiness: advisor.happiness + 5
+        player.pubWeight: player.pubWeight + 1
+        player.citations: player.citations + randi(8) + 2
     fail:
     - id: DisplayRandomMessage
       messages:
@@ -717,51 +940,177 @@
       confirm: message.unfortunate
     - id: UpdateItemAmounts
       updates:
-        submittedPaper: -1
+        submittedICLR: -1
         rejectedPaper: 1
     - id: UpdateVariable
       variable: player.hope
       value: player.hope - 10
-- id: ResubmittedPaperReview
+- id: DecisionICML
   trigger: MonthBegin
-  probability: 0.70
   conditions:
   - id: Expression
-    expression: itemCount('resubmittedPaper') >= 1
+    expression: month === 5 && itemCount('submittedICML') > 0
   actions:
   - id: CoinFlip
-    probability: getAttributeValue('player.paperAcceptanceBoost') + 0.6
+    probability: clip(0.30 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
     success:
     - id: DisplayMessage
-      message: message.resubmittedPaperAccepted
+      message: message.acceptedICML
       confirm: message.party
     - id: UpdateItemAmounts
       updates:
-        resubmittedPaper: -1
+        submittedICML: -1
         paper: 1
     - id: UpdateVariables
       updates:
-        player.hope: player.hope + 10
+        player.hope: player.hope + 12
         advisor.happiness: advisor.happiness + 5
+        player.pubWeight: player.pubWeight + 1
+        player.citations: player.citations + randi(8) + 2
     fail:
     - id: DisplayRandomMessage
       messages:
-      - message.resubmittedPaperRejected1
+      - message.paperRejected1
+      - message.paperRejected2
+      - message.paperRejected3
+      - message.paperRejected4
+      - message.paperRejected5
+      - message.paperRejected6
+      - message.paperRejected7
+      - message.paperRejected8
+      - message.paperRejected9
+      - message.paperRejected10
       confirm: message.unfortunate
     - id: UpdateItemAmounts
       updates:
-        resubmittedPaper: -1
+        submittedICML: -1
         rejectedPaper: 1
     - id: UpdateVariable
       variable: player.hope
-      value: player.hope - 20
-# Progress lost events
+      value: player.hope - 10
+- id: DecisionNeurIPS
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: month === 9 && itemCount('submittedNeurIPS') > 0
+  actions:
+  - id: CoinFlip
+    probability: clip(0.28 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
+    success:
+    - id: DisplayMessage
+      message: message.acceptedNeurIPS
+      confirm: message.party
+    - id: UpdateItemAmounts
+      updates:
+        submittedNeurIPS: -1
+        paper: 1
+    - id: UpdateVariables
+      updates:
+        player.hope: player.hope + 12
+        advisor.happiness: advisor.happiness + 5
+        player.pubWeight: player.pubWeight + 1
+        player.citations: player.citations + randi(8) + 2
+    fail:
+    - id: DisplayRandomMessage
+      messages:
+      - message.paperRejected1
+      - message.paperRejected2
+      - message.paperRejected3
+      - message.paperRejected4
+      - message.paperRejected5
+      - message.paperRejected6
+      - message.paperRejected7
+      - message.paperRejected8
+      - message.paperRejected9
+      - message.paperRejected10
+      confirm: message.unfortunate
+    - id: UpdateItemAmounts
+      updates:
+        submittedNeurIPS: -1
+        rejectedPaper: 1
+    - id: UpdateVariable
+      variable: player.hope
+      value: player.hope - 10
+- id: DecisionCVPR
+  trigger: MonthBegin
+  conditions:
+  - id: Expression
+    expression: month === 2 && itemCount('submittedCVPR') > 0
+  actions:
+  - id: CoinFlip
+    probability: clip(0.30 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
+    success:
+    - id: DisplayMessage
+      message: message.acceptedCVPR
+      confirm: message.party
+    - id: UpdateItemAmounts
+      updates:
+        submittedCVPR: -1
+        paper: 1
+    - id: UpdateVariables
+      updates:
+        player.hope: player.hope + 12
+        advisor.happiness: advisor.happiness + 5
+        player.pubWeight: player.pubWeight + 1
+        player.citations: player.citations + randi(8) + 2
+    fail:
+    - id: DisplayRandomMessage
+      messages:
+      - message.paperRejected1
+      - message.paperRejected2
+      - message.paperRejected3
+      - message.paperRejected4
+      - message.paperRejected5
+      - message.paperRejected6
+      - message.paperRejected7
+      - message.paperRejected8
+      - message.paperRejected9
+      - message.paperRejected10
+      confirm: message.unfortunate
+    - id: UpdateItemAmounts
+      updates:
+        submittedCVPR: -1
+        rejectedPaper: 1
+    - id: UpdateVariable
+      variable: player.hope
+      value: player.hope - 10
+# Rebuttal: applies while any paper is under review.
+- id: RebuttalPeriod
+  trigger: MonthBegin
+  probability: 0.5
+  conditions:
+  - id: Expression
+    expression: (itemCount('submittedICLR') + itemCount('submittedICML') + itemCount('submittedNeurIPS') + itemCount('submittedCVPR')) >= 1 && !hasStatus('strongRebuttal')
+  actions:
+  - id: DisplayChoices
+    message: message.rebuttalPeriod
+    choices:
+    - message: message.writeRebuttal
+      actions:
+      - id: DisplayMessage
+        message: message.rebuttalWritten
+        confirm: message.hope
+      - id: SetStatus
+        statusId: strongRebuttal
+        on: true
+      - id: UpdateVariables
+        updates:
+          player.exhaustionLevel: player.exhaustionLevel + 1
+          player.hope: player.hope - 2
+    - message: message.skipRebuttal
+      actions:
+      - id: DisplayMessage
+        message: message.rebuttalSkipped
+        confirm: message.ok
+# ===========================================================================
+# Getting scooped (reduced by preprints and reputation)
+# ===========================================================================
 - id: IdeaDoneByOthers
   trigger: MonthBegin
   conditions:
   - id: Expression
     expression: itemCount('idea') >= 1
-  probability: max(0.01, 0.20 - itemCount('conferencePaper') / 20)
+  probability: max(0.02, 0.18 - hasStatus('preprinted') * 0.07 - min(player.pubWeight * 0.01, 0.07))
   actions:
   - id: DisplayMessage
     message: message.ideaDoneByOthers
@@ -777,7 +1126,7 @@
   conditions:
   - id: Expression
     expression: itemCount('preliminaryResult') >= 1
-  probability: 0.05
+  probability: max(0.02, 0.07 - hasStatus('preprinted') * 0.03)
   actions:
   - id: DisplayMessage
     message: message.prelimDoneByOthers
@@ -806,7 +1155,7 @@
     - id: UpdateVariable
       variable: player.hope
       value: player.hope - 5
-# Progress advancement events
+# Progress advancement
 - id: Seminar
   trigger: MonthBegin
   probability: 0.05
@@ -834,60 +1183,15 @@
     updates:
       preliminaryResult: -1
       majorResult: 1
-# Conference event chain
-# 4 - 9 call for papers, 10-11 review 12 conf
-# Prelim -> Conf paper
-- id: CallForPapers
+# ===========================================================================
+# Conference travel (networking -> ideas, hope, citations)
+# ===========================================================================
+- id: AttendNeurIPS
   trigger: MonthBegin
+  probability: 0.85
   conditions:
   - id: Expression
-    expression: month === 3
-  actions:
-  - id: DisplayMessage
-    message: message.callForPapers
-    confirm: message.cool
-  - id: SetStatus
-    statusId: callForPapers
-    on: true
-- id: ConfPaperReview
-  trigger: MonthBegin
-  conditions:
-  - id: Expression
-    expression: month === 11 && itemCount('submittedConfPaper') > 0
-  actions:
-  - id: CoinFlip
-    probability: min(0.5, 0.3 + player.readPapers / 50)
-    success:
-    - id: DisplayRandomMessage
-      messages:
-      - message.confPaperAccepted1
-      - message.confPaperAccepted2
-      confirm: message.great
-    - id: UpdateVariables
-      updates:
-        player.hope: player.hope + 5
-        player.canAttendConf: 1
-        advisor.happiness: advisor.happiness + 3
-    - id: UpdateItemAmounts
-      updates:
-        conferencePaper: 1
-        submittedConfPaper: -1
-    fail:
-    - id: DisplayMessage
-      message: message.confPaperRejected
-      confirm: message.unfortunate
-    - id: UpdateVariables
-      updates:
-        player.hope: player.hope - 5
-    - id: UpdateItemAmounts
-      updates:
-        submittedConfPaper: -1
-        preliminaryResult: 1
-- id: ConfMeeting
-  trigger: MonthBegin
-  conditions:
-  - id: Expression
-    expression: month === 12 && player.canAttendConf
+    expression: month === 12 && itemCount('paper') >= 1
   actions:
   - id: DisplayChoices
     message: message.attendConf
@@ -902,18 +1206,18 @@
           - message.confNiceTour1
           - message.confNiceTour2
           confirm: message.great
-        - id: UpdateVariables
-          updates:
-            player.hope: player.hope + 5
+        - id: UpdateVariable
+          variable: player.hope
+          value: player.hope + 5
         fail:
         - id: DisplayRandomMessage
           messages:
           - message.skipConfSessionFail1
           - message.skipConfSessionFail2
           confirm: message.oops
-        - id: UpdateVariables
-          updates:
-            advisor.happiness: advisor.happiness - 3
+        - id: UpdateVariable
+          variable: advisor.happiness
+          value: advisor.happiness - 3
     - message: message.attendConfSession
       actions:
       - id: CoinFlip
@@ -925,30 +1229,86 @@
         - id: GiveItem
           itemId: idea
           amount: 1
+        - id: UpdateVariable
+          variable: player.citations
+          value: player.citations + randi(10) + 3
         fail:
         - id: DisplayMessage
           message: message.confNoNewIdea
           confirm: message.great
+        - id: UpdateVariables
+          updates:
+            player.hope: player.hope + 5
+            player.citations: player.citations + randi(6) + 2
+- id: AttendSummerConf
+  trigger: MonthBegin
+  probability: 0.7
+  conditions:
+  - id: Expression
+    expression: month === 7 && itemCount('paper') >= 1
+  actions:
+  - id: DisplayChoices
+    message: message.attendConf
+    choices:
+    - message: message.skipConfSession
+      actions:
+      - id: CoinFlip
+        probability: 0.6
+        success:
+        - id: DisplayRandomMessage
+          messages:
+          - message.confNiceTour1
+          - message.confNiceTour2
+          confirm: message.great
         - id: UpdateVariable
           variable: player.hope
           value: player.hope + 5
-  - id: UpdateVariable
-    variable: player.canAttendConf
-    value: 0
-# Random events
+        fail:
+        - id: DisplayRandomMessage
+          messages:
+          - message.skipConfSessionFail1
+          - message.skipConfSessionFail2
+          confirm: message.oops
+        - id: UpdateVariable
+          variable: advisor.happiness
+          value: advisor.happiness - 3
+    - message: message.attendConfSession
+      actions:
+      - id: CoinFlip
+        probability: 0.6
+        success:
+        - id: DisplayMessage
+          message: message.confNewIdea
+          confirm: message.great
+        - id: GiveItem
+          itemId: idea
+          amount: 1
+        - id: UpdateVariable
+          variable: player.citations
+          value: player.citations + randi(10) + 3
+        fail:
+        - id: DisplayMessage
+          message: message.confNoNewIdea
+          confirm: message.great
+        - id: UpdateVariables
+          updates:
+            player.hope: player.hope + 5
+            player.citations: player.citations + randi(6) + 2
+# Random morale / citation events
 - id: PaperCitation
   trigger: MonthBegin
   conditions:
   - id: Expression
-    expression: itemCount('paper') >= 1 || itemCount('conferencePaper') >= 1
-  probability: 0.1
+    expression: itemCount('paper') >= 1
+  probability: 0.12
   actions:
   - id: DisplayMessage
     message: message.paperCited
     confirm: message.great
-  - id: UpdateVariable
-    variable: player.hope
-    value: player.hope + 5
+  - id: UpdateVariables
+    updates:
+      player.hope: player.hope + 4
+      player.citations: player.citations + randi(8) + 2
 - id: EmergencyHope
   trigger: MonthBegin
   probability: 0.1
@@ -967,7 +1327,62 @@
   - id: UpdateVariable
     variable: player.hope
     value: player.hope + 5
-# Advisor comments
+- id: ModelGoesViral
+  trigger: MonthBegin
+  probability: 0.07
+  conditions:
+  - id: Expression
+    expression: itemCount('paper') >= 1 || hasStatus('preprinted')
+  actions:
+  - id: DisplayRandomMessage
+    messages:
+    - message.modelViral1
+    - message.modelViral2
+    confirm: message.party
+  - id: UpdateVariables
+    updates:
+      player.hope: player.hope + 6
+      player.citations: player.citations + randi(15) + 10
+      player.pubWeight: player.pubWeight + 1
+# ===========================================================================
+# Summer internship at a frontier lab (compute + idea + reputation)
+# ===========================================================================
+- id: InternshipOffer
+  trigger: YearBegin
+  once: true
+  probability: 0.6
+  conditions:
+  - id: Expression
+    expression: year >= 2 && year <= 5
+  actions:
+  - id: DisplayChoices
+    message: message.internshipOffer
+    choices:
+    - message: message.acceptInternship
+      actions:
+      - id: DisplayMessage
+        message: message.internshipAccepted
+        confirm: message.excited
+      - id: GiveItem
+        itemId: idea
+        amount: 1
+      - id: UpdateVariables
+        updates:
+          player.hope: player.hope + 10
+          advisor.fundingLevel: advisor.fundingLevel + 1
+          advisor.happiness: advisor.happiness - 1
+          player.compute: clip(player.compute + 6, 0, 40)
+          player.pubWeight: player.pubWeight + 1
+    - message: message.declineInternship
+      actions:
+      - id: DisplayMessage
+        message: message.internshipDeclined
+        confirm: message.ok
+      - id: UpdateVariables
+        updates:
+          player.hope: player.hope + 2
+          advisor.happiness: advisor.happiness + 2
+# Advisor nudges
 - id: QualifyReminder
   trigger: MonthBegin
   once: true

@@ -8,15 +8,17 @@ items:
     rarity: 3
   - id: figure
     rarity: 3
-  - id: paper
-    rarity: 10
-  - id: submittedPaper
+  - id: paperDraft
+    rarity: 5
+  - id: submittedICLR
     rarity: 6
-  - id: resubmittedPaper
+  - id: submittedICML
+    rarity: 6
+  - id: submittedCVPR
+    rarity: 6
+  - id: submittedNeurIPS
     rarity: 6
   - id: rejectedPaper
     rarity: 6
-  - id: conferencePaper
-    rarity: 6
-  - id: submittedConfPaper
-    rarity: 5
+  - id: paper
+    rarity: 10
