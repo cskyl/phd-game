@@ -762,7 +762,7 @@
         variable: player.readPapers
         value: player.readPapers + 1
       - id: CoinFlip
-        probability: 0.60 + player.readPapers / 100 - itemCount('idea') / 20
+        probability: 0.78 + player.readPapers / 100 - itemCount('idea') / 30
         success:
         - id: GiveItem
           itemId: idea
@@ -811,7 +811,7 @@
         variable: player.compute
         value: player.compute - 2
       - id: CoinFlip
-        probability: min(0.80 + player.readPapers / 60, 0.95)
+        probability: min(0.88 + player.readPapers / 60, 0.97)
         success:
         - id: DisplayMessage
           message: message.gainPrelimResult
@@ -844,7 +844,7 @@
         variable: player.compute
         value: player.compute - 5
       - id: CoinFlip
-        probability: min(0.70 + player.readPapers / 70, 0.9)
+        probability: min(0.78 + player.readPapers / 70, 0.92)
         success:
         - id: DisplayMessage
           message: message.gainPrelimResult
@@ -877,7 +877,7 @@
         variable: player.compute
         value: player.compute - 10
       - id: CoinFlip
-        probability: min(0.55 + getAttributeValue('player.experimentBoost') + player.readPapers / 80, 0.85)
+        probability: min(0.62 + getAttributeValue('player.experimentBoost') + player.readPapers / 80, 0.88)
         success:
         - id: DisplayMessage
           message: message.ambitiousOk
@@ -909,7 +909,7 @@
         value: player.compute - 3
       - id: Random
         groups:
-        - weight: 0.65
+        - weight: 0.72
           actions:
           - id: DisplayMessage
             message: message.gainMajorResult
@@ -921,7 +921,7 @@
           - id: UpdateVariable
             variable: player.hope
             value: player.hope + 5
-        - weight: 0.35
+        - weight: 0.28
           actions:
           - id: DisplayRandomMessage
             messages:
@@ -943,7 +943,7 @@
         value: player.compute - 2
       - id: Random
         groups:
-        - weight: 0.65 + getAttributeValue('player.experimentBoost')
+        - weight: 0.75 + getAttributeValue('player.experimentBoost')
           actions:
           - id: DisplayMessage
             message: message.gainFigure
@@ -1004,7 +1004,7 @@
       requirement: itemCount('majorResult') > 0 && itemCount('figure') >= rule.figuresRequired && itemCount('paper') < rule.papersRequired
       actions:
       - id: CoinFlip
-        probability: 0.8 + itemCount('paper') / 20
+        probability: 0.88 + itemCount('paper') / 20
         success:
         - id: DisplayMessage
           message: message.draftPaperComplete
@@ -1343,7 +1343,7 @@
     maxIterations: 20
     actions:
     - id: CoinFlip
-      probability: clip(0.32 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
+      probability: clip(0.35 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
       success:
       - id: DisplayMessage
         message: message.acceptedICLR
@@ -1393,7 +1393,7 @@
     maxIterations: 20
     actions:
     - id: CoinFlip
-      probability: clip(0.30 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
+      probability: clip(0.33 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
       success:
       - id: DisplayMessage
         message: message.acceptedICML
@@ -1443,7 +1443,7 @@
     maxIterations: 20
     actions:
     - id: CoinFlip
-      probability: clip(0.28 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
+      probability: clip(0.31 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
       success:
       - id: DisplayMessage
         message: message.acceptedNeurIPS
@@ -1493,7 +1493,7 @@
     maxIterations: 20
     actions:
     - id: CoinFlip
-      probability: clip(0.30 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
+      probability: clip(0.33 + getAttributeValue('player.paperAcceptanceBoost') + min(player.pubWeight * 0.02, 0.2), 0.05, 0.9)
       success:
       - id: DisplayMessage
         message: message.acceptedCVPR
@@ -1629,7 +1629,7 @@
 # Progress advancement
 - id: Seminar
   trigger: MonthBegin
-  probability: 0.05
+  probability: 0.10
   actions:
   - id: DisplayRandomMessage
     messages:
