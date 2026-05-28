@@ -130,7 +130,11 @@ message.newMonth: 新的一个月开始了。来看看待办清单。
 message.readPapers: 刷 arXiv 读论文。
 message.gainNewIdea1: 刷了一堆 arXiv 摘要后，一个 **新研究想法** 突然冒了出来。
 message.gainNewIdea2: 盯着某篇论文的相关工作看了几个小时，你发现了一个空白，得到了 **一个新想法**。
-message.workOnIdea: 跑个小实验（−1 算力）。
+message.developIncremental: 做这个想法——增量式小实验（−2 算力）。
+message.developSolid: 做这个想法——扎实的实证项目（−5 算力）。
+message.developAmbitious: 做这个想法——雄心勃勃的大规模实验（−10 算力）。
+message.ambitiousOk: 大规模实验 **开花结果** ——一个早期结果就足够亮眼，大家已经开始议论；这工作看起来要做大了。
+message.ambitiousFail: 大规模实验 **崩了**（NaN loss → OOM）。一大笔算力就这么烧没了。
 message.oldIdea1: 你把想法讲给导师听，导师翻出一篇 2019 年的论文——人家早就做过一模一样的了。
 message.oldIdea2: 导师觉得这个想法太 incremental，让你想得更大一点。
 message.oldIdea3: 导师觉得新意不够，让你再多读读近期文献。
@@ -142,9 +146,6 @@ message.workOnPrelimResult: 扩展小规模结果（−3 算力）。
 message.gainMajorResult: 它 scale 上去了！你超过了强基线，拿到了一个 **SOTA 结果**。
 message.noMajorResult1: 你确信这里面有真东西，但一上规模训练就发散。还得再花点时间。
 message.noMajorResult2: 导师发现了一个数据泄露的 bug，把你的指标都刷高了。回炉重造吧。
-message.trainLargeModel: 训练大模型（−8 算力，高影响力）。
-message.largeModelSuccess: 你砸了一大笔算力跑了个大规模实验——结果 **效果炸裂**。一个轰动的 SOTA 结果、一张惊艳的图，社区已经开始讨论了。
-message.largeModelFail: 大规模实验跑到一半 **发散** 了（先 NaN loss，再 OOM）。你白白烧掉了一大笔 GPU 机时。
 message.workOnFigure: 跑消融 / 画图（−2 算力）。
 message.gainFigure: 消融干净又有说服力。你做出了一张漂亮的 **图**。
 message.noFigure1: 结果噪声很大、不够显著。你需要更多随机种子和更多算力。

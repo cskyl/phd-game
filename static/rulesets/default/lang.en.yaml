@@ -130,7 +130,11 @@ message.newMonth: A new month begins. Let's check the to-do list.
 message.readPapers: Read papers on arXiv.
 message.gainNewIdea1: After scrolling through arXiv and a dozen abstracts, a **new research idea** clicked.
 message.gainNewIdea2: After staring at a related-work section for hours, you spotted a gap and got a **new idea**.
-message.workOnIdea: Run a quick experiment (−1 GPU).
+message.developIncremental: Develop the idea — incremental study (−2 GPU).
+message.developSolid: Develop the idea — solid empirical project (−5 GPU).
+message.developAmbitious: Develop the idea — ambitious large-scale run (−10 GPU).
+message.ambitiousOk: The ambitious run **paid off** — striking early results from a large-scale experiment. People are already talking; the work is taking shape as something big.
+message.ambitiousFail: The ambitious large-scale run **diverged** (NaN loss → OOM). You torched a huge chunk of compute for nothing.
 message.oldIdea1: You pitched the idea to your advisor, who pulled up a 2019 paper that already did exactly this.
 message.oldIdea2: Your advisor thought the idea was incremental and asked you to think bigger.
 message.oldIdea3: Your advisor felt the idea was not novel enough and told you to read more of the recent literature.
@@ -142,9 +146,6 @@ message.workOnPrelimResult: Scale up a toy result (−3 GPU).
 message.gainMajorResult: It scales! You beat the strong baselines and have a **SOTA result**.
 message.noMajorResult1: You're sure there's a real result here, but training keeps diverging at scale. You need more time.
 message.noMajorResult2: Your advisor spotted a data-leakage bug that inflated your numbers. Back to the drawing board.
-message.trainLargeModel: Train a large model (−8 GPU, high impact).
-message.largeModelSuccess: You burned a huge chunk of compute on a large-scale run — and it **worked spectacularly**. A headline SOTA result, a striking figure, and the community is already talking about it.
-message.largeModelFail: The large run **diverged** halfway through (NaN loss, then OOM). You torched a small fortune in GPU hours for nothing.
 message.workOnFigure: Run ablations / make plots (−2 GPU).
 message.gainFigure: The ablations are clean and convincing. You produced a beautiful **plot**.
 message.noFigure1: The runs came back noisy and inconclusive. You'll need more seeds and more compute.
